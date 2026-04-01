@@ -1,52 +1,75 @@
-import { TrendingUp, Shield, Zap } from "lucide-react";
+import { Shield, TrendingUp, Zap } from "lucide-react";
+import saimlessLogo from "@/assets/saimless-logo.png";
 
 export const HeroSection = () => {
   return (
-    <section className="relative overflow-hidden bg-primary text-primary-foreground">
-      {/* Subtle geometric pattern */}
-      <div className="absolute inset-0 opacity-[0.12]">
-        <div className="absolute top-0 left-0 w-full h-full"
-          style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, hsl(var(--background)) 1px, transparent 1px),
-              radial-gradient(circle at 75% 75%, hsl(var(--background)) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px',
-          }}
-        />
+    <section className="relative overflow-hidden bg-hero text-hero-foreground">
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage: `linear-gradient(hsl(var(--hero-foreground)) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(var(--hero-foreground)) 1px, transparent 1px)`,
+          backgroundSize: '48px 48px',
+        }}
+      />
+
+      {/* Gradient orb */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.06]"
+        style={{
+          background: 'radial-gradient(circle, hsl(207 90% 48%) 0%, transparent 70%)',
+        }}
+      />
+
+      {/* Top bar with logo */}
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <img src={saimlessLogo} alt="SAImless" className="h-8 w-8 object-contain" />
+            <span className="text-sm font-semibold tracking-tight text-hero-foreground">
+              SAImless
+            </span>
+          </div>
+          <div className="hidden sm:flex items-center gap-1.5 text-xs text-hero-muted">
+            <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+            Free tool — no signup required
+          </div>
+        </div>
       </div>
 
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_45%,rgba(0,0,0,0.12)_100%)]" />
-
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-28 sm:pb-36 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-black/10 px-4 py-1.5 text-sm font-medium mb-8">
-          <Zap className="h-3.5 w-3.5" />
-          Free gross margin benchmark estimate
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 sm:pt-20 pb-28 sm:pb-36 text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-hero-foreground/10 bg-hero-foreground/5 backdrop-blur-sm px-4 py-1.5 text-xs font-medium text-hero-muted mb-8">
+          <TrendingUp className="h-3 w-3 text-primary" />
+          Gross Margin Benchmark Estimator
         </div>
 
-        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-800 leading-[1.1] tracking-tight mb-6">
+        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.4rem] font-800 leading-[1.08] tracking-tight mb-6 text-balance">
           Estimate your
-          <span className="block text-white mt-1">gross margin opportunity</span>
+          <br />
+          <span className="bg-gradient-to-r from-primary to-[hsl(207,90%,62%)] bg-clip-text text-transparent">
+            gross margin opportunity
+          </span>
         </h1>
 
-        <p className="text-base sm:text-lg text-primary-foreground/88 max-w-2xl mx-auto leading-relaxed mb-10">
-          Enter a few inputs to see how your current gross margin compares with typical industry benchmark ranges.
+        <p className="text-base sm:text-lg text-hero-muted max-w-xl mx-auto leading-relaxed mb-4">
+          See how your current gross margin compares with industry benchmark ranges — in less than 60 seconds.
         </p>
 
-        <p className="text-sm sm:text-base text-primary-foreground/72 max-w-2xl mx-auto leading-relaxed mb-10 -mt-5">
+        <p className="text-sm text-hero-muted/70 max-w-lg mx-auto leading-relaxed mb-12">
           A quick, directional estimate for pricing, product mix, and direct-cost decisions.
         </p>
 
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-10 text-sm text-primary-foreground/80">
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-[13px] text-hero-muted/80">
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-white" />
+            <Shield className="h-3.5 w-3.5 text-primary/70" />
             <span>No signup required</span>
           </div>
           <div className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-white" />
-            <span>Based on industry benchmarks</span>
+            <TrendingUp className="h-3.5 w-3.5 text-primary/70" />
+            <span>Industry benchmarks</span>
           </div>
           <div className="flex items-center gap-2">
-            <Zap className="h-4 w-4 text-white" />
-            <span>Takes less than 60 seconds</span>
+            <Zap className="h-3.5 w-3.5 text-primary/70" />
+            <span>Results in 60 seconds</span>
           </div>
         </div>
       </div>

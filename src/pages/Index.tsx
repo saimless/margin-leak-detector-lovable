@@ -89,27 +89,27 @@ const Index = () => {
       <HeroSection />
 
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-muted/50 to-background pointer-events-none" />
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20 pb-16 sm:pb-24">
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary/60 via-background to-background pointer-events-none h-64" />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20 pb-20 sm:pb-28">
           <AnimatePresence mode="wait">
             {!result ? (
               <motion.div
                 key="form"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
               >
                 <EstimatorForm onCalculate={handleCalculate} />
               </motion.div>
             ) : (
               <motion.div
                 key="result"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-8"
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="space-y-6"
               >
                 <ResultSection
                   result={result}
