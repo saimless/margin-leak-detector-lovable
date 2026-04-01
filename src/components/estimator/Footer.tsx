@@ -4,7 +4,8 @@ export const Footer = () => {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="text-center space-y-2">
           <p className="text-xs text-muted-foreground">
-            This tool provides directional estimates only. Actual results depend on business-specific factors.
+            This tool provides directional estimates based on benchmark data. Actual results depend on your business
+            model, execution, and market conditions.
           </p>
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} Margin Improvement Estimator. All rights reserved.

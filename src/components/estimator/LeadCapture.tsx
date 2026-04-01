@@ -32,7 +32,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
         </div>
         <h3 className="font-display text-xl font-700 text-foreground mb-2">Thank you, {name}.</h3>
         <p className="text-sm text-muted-foreground max-w-md mx-auto">
-          We'll send your personalized margin improvement breakdown to <strong className="text-foreground">{email}</strong> shortly.
+          We'll send your personalized gross margin breakdown to <strong className="text-foreground">{email}</strong> shortly.
         </p>
       </div>
     );
@@ -89,7 +89,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
         <Button
           type="submit"
           size="lg"
-          className="w-full h-12 text-base font-semibold rounded-xl bg-foreground text-background hover:bg-foreground/90 transition-all duration-200"
+          className="w-full h-12 text-base font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
         >
           <Send className="h-4 w-4 mr-2" />
           Send my breakdown
