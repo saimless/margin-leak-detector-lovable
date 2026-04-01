@@ -8,9 +8,9 @@ export const HeroSection = () => {
       <svg className="absolute inset-0 w-full h-full opacity-[0.07]" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="geo-pattern" x="0" y="0" width="120" height="104" patternUnits="userSpaceOnUse">
-            <path d="M0 52 L60 0 L120 52 L60 104 Z" fill="none" stroke="hsl(220 15% 60%)" strokeWidth="0.5" />
-            <path d="M0 0 L60 52 L0 104" fill="none" stroke="hsl(220 15% 65%)" strokeWidth="0.3" />
-            <path d="M120 0 L60 52 L120 104" fill="none" stroke="hsl(220 15% 65%)" strokeWidth="0.3" />
+            <path d="M0 52 L60 0 L120 52 L60 104 Z" fill="none" stroke="hsl(0 0% 0%)" strokeWidth="0.5" />
+            <path d="M0 0 L60 52 L0 104" fill="none" stroke="hsl(0 0% 0%)" strokeWidth="0.3" />
+            <path d="M120 0 L60 52 L120 104" fill="none" stroke="hsl(0 0% 0%)" strokeWidth="0.3" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#geo-pattern)" />
@@ -19,7 +19,7 @@ export const HeroSection = () => {
       {/* Subtle blue radial glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full opacity-[0.04]"
         style={{
-          background: 'radial-gradient(ellipse, hsl(204 100% 50%) 0%, transparent 70%)',
+          background: "radial-gradient(ellipse, hsl(207 100% 50%) 0%, transparent 70%)",
         }}
       />
 
@@ -27,7 +27,7 @@ export const HeroSection = () => {
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-6">
         <div className="flex items-center justify-between">
           <a href="https://www.saimless.com" target="_blank" rel="noreferrer" className="flex items-center gap-2.5 group">
-            <img src={saimlessLogo} alt="SAImless" className="h-9 w-9 object-contain" />
+            <img src={saimlessLogo} alt="SAImless" className="h-10 w-10 object-contain" />
             <span className="text-[15px] font-bold tracking-tight text-foreground">
               S<span className="text-primary">AI</span>mless
             </span>
