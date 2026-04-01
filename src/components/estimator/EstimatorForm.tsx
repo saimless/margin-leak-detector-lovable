@@ -62,9 +62,9 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
     <div className="bg-card rounded-2xl shadow-premium border border-border/50 overflow-hidden">
       {/* Header */}
       <div className="px-6 sm:px-10 pt-8 sm:pt-10 pb-4">
-        <div className="flex items-center gap-2 text-xs font-medium text-primary mb-3">
+        <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-3">
           <div className="w-5 h-[2px] bg-primary rounded-full" />
-          MARGIN ESTIMATOR
+          Margin Estimator
         </div>
         <h2 className="font-display text-xl sm:text-2xl font-700 text-foreground mb-1.5">
           Estimate your gross margin opportunity
@@ -75,7 +75,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
       </div>
 
       <div className="px-6 sm:px-10 pb-2">
-        <div className="h-px bg-border" />
+        <div className="h-px bg-border/70" />
       </div>
 
       <form onSubmit={handleSubmit} className="px-6 sm:px-10 py-6 sm:py-8 space-y-7">
@@ -115,7 +115,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           <div className="flex items-center justify-between">
             <p className="text-xs text-muted-foreground">Enter your best estimate of annual revenue.</p>
             {revenuePreview && (
-              <p className="text-xs font-medium text-foreground/70 bg-secondary px-2 py-0.5 rounded">
+              <p className="text-xs font-medium text-primary bg-highlight-soft px-2 py-0.5 rounded-md">
                 ≈ {revenuePreview}
               </p>
             )}
@@ -143,7 +143,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 className={`group px-4 py-3.5 rounded-xl border text-sm font-medium text-left transition-all duration-200 flex items-center justify-between
                   ${sector === option.value
                     ? "border-primary bg-highlight-soft text-primary shadow-soft ring-1 ring-primary/15"
-                    : "border-border/80 bg-surface text-foreground hover:border-primary/30 hover:bg-highlight-soft/40"
+                    : "border-border/80 bg-card text-foreground hover:border-primary/30 hover:bg-highlight-soft/40"
                   } ${errors.sector && touched.sector ? "border-destructive/30" : ""}`}
               >
                 <span>{option.label}</span>
@@ -154,9 +154,9 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
             ))}
           </div>
           {selectedBenchmark && (
-            <div className="bg-secondary/60 rounded-lg px-3.5 py-2.5 border border-border/40">
+            <div className="bg-highlight-soft/50 rounded-lg px-3.5 py-2.5 border border-primary/10">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                <span className="font-medium text-foreground/80">Benchmark:</span>{" "}
+                <span className="font-semibold text-primary">Benchmark:</span>{" "}
                 Anchor at {formatBenchmarkAnchor(selectedBenchmark.anchor)} · Band {formatBenchmarkRange(selectedBenchmark.bandLow, selectedBenchmark.bandHigh)}
               </p>
             </div>
@@ -176,7 +176,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
             </Label>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button type="button" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Gross margin explanation">
+                <button type="button" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Gross margin explanation">
                   <Info className="h-3.5 w-3.5" />
                 </button>
               </TooltipTrigger>
@@ -201,7 +201,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 className={`px-3 py-3 rounded-xl border text-sm font-medium text-center transition-all duration-200
                   ${grossMarginRange === range
                     ? "border-primary bg-highlight-soft text-primary shadow-soft ring-1 ring-primary/15"
-                    : "border-border/80 bg-surface text-foreground hover:border-primary/30 hover:bg-highlight-soft/40"
+                    : "border-border/80 bg-card text-foreground hover:border-primary/30 hover:bg-highlight-soft/40"
                   } ${errors.margin && touched.margin ? "border-destructive/30" : ""}`}
               >
                 {range}
