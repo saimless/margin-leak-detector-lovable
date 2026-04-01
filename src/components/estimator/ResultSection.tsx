@@ -63,30 +63,30 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
     <div className="space-y-5">
       {/* Main results card */}
       <div className="bg-card rounded-2xl shadow-premium border border-border/50 overflow-hidden">
-        {/* Header */}
-        <div className="bg-hero text-hero-foreground px-6 sm:px-10 py-8 sm:py-10">
-          <div className="flex items-center gap-2 text-xs font-medium text-primary mb-4">
+        {/* Header - light blue branded */}
+        <div className="bg-primary/[0.04] border-b border-primary/10 px-6 sm:px-10 py-8 sm:py-10">
+          <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
             <div className="w-5 h-[2px] bg-primary rounded-full" />
-            ANALYSIS RESULTS
+            Analysis Results
           </div>
-          <h2 className="font-display text-2xl sm:text-3xl font-800 tracking-tight leading-tight text-hero-foreground mb-3">
+          <h2 className="font-display text-2xl sm:text-3xl font-800 tracking-tight leading-tight text-foreground mb-3">
             Gross margin improvement scenarios
           </h2>
-          <p className="text-sm text-hero-muted max-w-xl leading-relaxed">
+          <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
             Potential gross profit improvement across different performance levels within your selected benchmark range.
           </p>
         </div>
 
         <div className="px-6 sm:px-10 py-8 space-y-6">
           {/* Input summary */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3">
             {[
               { label: "Revenue", value: formatEuro(result.revenue) },
               { label: "Sector", value: result.sector },
               { label: "Gross margin", value: result.grossMarginRange },
             ].map((item) => (
-              <div key={item.label} className="bg-secondary/50 rounded-xl px-4 py-3 border border-border/40">
-                <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider mb-1">{item.label}</p>
+              <div key={item.label} className="bg-secondary/60 rounded-xl px-4 py-3 border border-border/40">
+                <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mb-1">{item.label}</p>
                 <p className="text-sm font-semibold text-foreground truncate">{item.value}</p>
               </div>
             ))}
@@ -103,7 +103,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                   key={scenario.label}
                   className={`rounded-xl border px-5 py-5 text-left transition-all duration-200 ${
                     isFocused
-                      ? "border-primary/30 bg-highlight-soft shadow-highlight ring-1 ring-primary/10 relative"
+                      ? "border-primary/25 bg-highlight-soft shadow-highlight ring-1 ring-primary/10 relative"
                       : "border-border/50 bg-secondary/30 hover:bg-secondary/50"
                   }`}
                 >
@@ -199,9 +199,9 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
       {/* CTA card */}
       <div className="bg-card rounded-2xl shadow-premium border border-border/50 px-6 sm:px-10 py-8 sm:py-10">
         <div className="text-center space-y-5">
-          <div className="inline-flex items-center gap-2 text-xs font-medium text-primary">
+          <div className="flex items-center justify-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider">
             <div className="w-5 h-[2px] bg-primary rounded-full" />
-            NEXT STEP
+            Next Step
           </div>
           <h3 className="font-display text-lg sm:text-xl font-700 text-foreground">
             Want deeper gross margin insights?
