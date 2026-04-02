@@ -59,8 +59,9 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   };
 
   return (
-    <div className="bg-card rounded-2xl shadow-premium border border-border/50 overflow-hidden">
-      {/* Header */}
+    <div className="bg-card rounded-2xl shadow-premium border border-border overflow-hidden">
+      {/* Header with blue accent bar */}
+      <div className="bg-primary px-6 sm:px-10 py-1" />
       <div className="px-6 sm:px-10 pt-8 sm:pt-10 pb-4">
         <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-3">
           <div className="w-5 h-[2px] bg-primary rounded-full" />
@@ -75,7 +76,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
       </div>
 
       <div className="px-6 sm:px-10 pb-2">
-        <div className="h-px bg-border/70" />
+        <div className="h-px bg-border" />
       </div>
 
       <form onSubmit={handleSubmit} className="px-6 sm:px-10 py-6 sm:py-8 space-y-7">
@@ -109,13 +110,13 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 }));
               }}
               placeholder="e.g. 12.500.000 or 12.5M"
-              className={`h-12 pl-8 text-base bg-surface border-border/80 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all ${errors.revenue && touched.revenue ? "border-destructive ring-destructive/10" : ""}`}
+              className={`h-12 pl-8 text-base bg-surface border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all ${errors.revenue && touched.revenue ? "border-destructive ring-destructive/10" : ""}`}
             />
           </div>
           <div className="flex items-center justify-between">
             <p className="text-xs text-muted-foreground">Enter your best estimate of annual revenue.</p>
             {revenuePreview && (
-              <p className="text-xs font-medium text-primary bg-highlight-soft px-2 py-0.5 rounded-md">
+              <p className="text-xs font-semibold text-primary bg-highlight-soft px-2.5 py-1 rounded-md border border-primary/10">
                 ≈ {revenuePreview}
               </p>
             )}
@@ -142,8 +143,8 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 }}
                 className={`group px-4 py-3.5 rounded-xl border text-sm font-medium text-left transition-all duration-200 flex items-center justify-between
                   ${sector === option.value
-                    ? "border-primary bg-highlight-soft text-primary shadow-soft ring-1 ring-primary/15"
-                    : "border-border/80 bg-card text-foreground hover:border-primary/30 hover:bg-highlight-soft/40"
+                    ? "border-primary bg-primary/5 text-primary shadow-sm ring-1 ring-primary/20"
+                    : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/[0.02]"
                   } ${errors.sector && touched.sector ? "border-destructive/30" : ""}`}
               >
                 <span>{option.label}</span>
@@ -154,7 +155,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
             ))}
           </div>
           {selectedBenchmark && (
-            <div className="bg-highlight-soft/50 rounded-lg px-3.5 py-2.5 border border-primary/10">
+            <div className="bg-primary/5 rounded-lg px-3.5 py-2.5 border border-primary/15">
               <p className="text-xs text-muted-foreground leading-relaxed">
                 <span className="font-semibold text-primary">Benchmark:</span>{" "}
                 Anchor at {formatBenchmarkAnchor(selectedBenchmark.anchor)} · Band {formatBenchmarkRange(selectedBenchmark.bandLow, selectedBenchmark.bandHigh)}
@@ -200,8 +201,8 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 }}
                 className={`px-3 py-3 rounded-xl border text-sm font-medium text-center transition-all duration-200
                   ${grossMarginRange === range
-                    ? "border-primary bg-highlight-soft text-primary shadow-soft ring-1 ring-primary/15"
-                    : "border-border/80 bg-card text-foreground hover:border-primary/30 hover:bg-highlight-soft/40"
+                    ? "border-primary bg-primary/5 text-primary shadow-sm ring-1 ring-primary/20"
+                    : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/[0.02]"
                   } ${errors.margin && touched.margin ? "border-destructive/30" : ""}`}
               >
                 {range}
@@ -219,14 +220,14 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           <Button
             type="submit"
             size="lg"
-            className="w-full h-13 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 shadow-elevated hover:shadow-highlight transition-all duration-300 group"
+            className="w-full h-13 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-elevated hover:shadow-highlight transition-all duration-300 group"
           >
             Calculate my gross margin estimate
             <ArrowRight className="h-4 w-4 ml-1.5 transition-transform group-hover:translate-x-0.5" />
           </Button>
         </div>
 
-        <p className="text-[11px] text-center text-muted-foreground/70 leading-relaxed">
+        <p className="text-[11px] text-center text-muted-foreground leading-relaxed">
           Benchmark-based estimate · No data is stored · Results are directional
         </p>
       </form>

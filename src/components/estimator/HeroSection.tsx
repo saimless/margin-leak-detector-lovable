@@ -4,36 +4,32 @@ import saimlessLogo from "@/assets/saimless-logo.png";
 export const HeroSection = () => {
   return (
     <section className="relative overflow-hidden bg-hero">
-      {/* Geometric triangular mesh pattern inspired by saimless.com */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.07]" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="geo-pattern" x="0" y="0" width="120" height="104" patternUnits="userSpaceOnUse">
-            <path d="M0 52 L60 0 L120 52 L60 104 Z" fill="none" stroke="hsl(0 0% 0%)" strokeWidth="0.5" />
-            <path d="M0 0 L60 52 L0 104" fill="none" stroke="hsl(0 0% 0%)" strokeWidth="0.3" />
-            <path d="M120 0 L60 52 L120 104" fill="none" stroke="hsl(0 0% 0%)" strokeWidth="0.3" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#geo-pattern)" />
-      </svg>
-
-      {/* Subtle blue radial glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full opacity-[0.04]"
+      {/* Subtle geometric pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.06]"
         style={{
-          background: "radial-gradient(ellipse, hsl(207 100% 50%) 0%, transparent 70%)",
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.3) 1px, transparent 0)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
+
+      {/* Soft gradient overlays for depth */}
+      <div className="absolute inset-0"
+        style={{
+          background: "linear-gradient(135deg, rgba(0,0,0,0.08) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)",
         }}
       />
 
       {/* Navigation bar */}
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-6">
         <div className="flex items-center justify-between">
-          <a href="https://www.saimless.com" target="_blank" rel="noreferrer" className="flex items-center gap-2.5 group">
-            <img src={saimlessLogo} alt="SAImless" className="h-10 w-10 object-contain" />
-            <span className="text-[15px] font-bold tracking-tight text-foreground">
-              S<span className="text-primary">AI</span>mless
+          <a href="https://www.saimless.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 group">
+            <img src={saimlessLogo} alt="SAImless" className="h-12 w-12 object-contain rounded-full bg-primary-foreground/10 p-0.5" />
+            <span className="text-[17px] font-bold tracking-tight text-hero-foreground">
+              S<span className="opacity-90">AI</span>mless
             </span>
           </a>
-          <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-            <div className="w-1.5 h-1.5 rounded-full bg-success" />
+          <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-hero-foreground/70">
+            <div className="w-1.5 h-1.5 rounded-full bg-hero-foreground/80 animate-pulse" />
             Free tool — no signup required
           </div>
         </div>
@@ -41,37 +37,37 @@ export const HeroSection = () => {
 
       {/* Hero content */}
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-28 sm:pb-36 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary mb-8">
+        <div className="inline-flex items-center gap-2 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-4 py-1.5 text-xs font-semibold text-hero-foreground mb-8 backdrop-blur-sm">
           <TrendingUp className="h-3 w-3" />
           Gross Margin Benchmark Estimator
         </div>
 
-        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.4rem] font-800 leading-[1.08] tracking-tight mb-6 text-balance text-foreground">
+        <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.4rem] font-800 leading-[1.08] tracking-tight mb-6 text-balance text-hero-foreground">
           Estimate your{" "}
-          <span className="text-primary">
+          <span className="text-hero-foreground underline decoration-hero-foreground/30 decoration-2 underline-offset-4">
             gross margin opportunity
           </span>
         </h1>
 
-        <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed mb-4">
+        <p className="text-base sm:text-lg text-hero-foreground/85 max-w-xl mx-auto leading-relaxed mb-4">
           See how your current gross margin compares with industry benchmark ranges — in less than 60 seconds.
         </p>
 
-        <p className="text-sm text-muted-foreground/70 max-w-lg mx-auto leading-relaxed mb-12">
+        <p className="text-sm text-hero-foreground/60 max-w-lg mx-auto leading-relaxed mb-12">
           A quick, directional estimate for pricing, product mix, and direct-cost decisions.
         </p>
 
-        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-[13px] text-muted-foreground">
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-[13px] text-hero-foreground/75">
           <div className="flex items-center gap-2">
-            <Shield className="h-3.5 w-3.5 text-primary" />
+            <Shield className="h-3.5 w-3.5" />
             <span>No signup required</span>
           </div>
           <div className="flex items-center gap-2">
-            <TrendingUp className="h-3.5 w-3.5 text-primary" />
+            <TrendingUp className="h-3.5 w-3.5" />
             <span>Industry benchmarks</span>
           </div>
           <div className="flex items-center gap-2">
-            <Zap className="h-3.5 w-3.5 text-primary" />
+            <Zap className="h-3.5 w-3.5" />
             <span>Results in 60 seconds</span>
           </div>
         </div>
