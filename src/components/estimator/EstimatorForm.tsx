@@ -281,10 +281,10 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           <Button
             type="submit"
             size="lg"
-            className="group h-12 w-full rounded-xl bg-primary text-base font-semibold text-primary-foreground shadow-elevated transition-all duration-300 hover:bg-primary/90 hover:shadow-highlight sm:h-13"
+            className="group min-h-12 h-auto w-full rounded-xl bg-primary px-5 py-3 text-center text-[0.95rem] font-semibold leading-snug text-primary-foreground whitespace-normal shadow-elevated transition-all duration-300 hover:bg-primary/90 hover:shadow-highlight sm:h-13 sm:px-6 sm:text-base sm:whitespace-nowrap"
           >
-            Calculate my gross margin estimate
-            <ArrowRight className="h-4 w-4 ml-1.5 transition-transform group-hover:translate-x-0.5" />
+            <span className="min-w-0">Calculate my gross margin estimate</span>
+            <ArrowRight className="hidden h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 xs:block" />
           </Button>
         </div>
 
