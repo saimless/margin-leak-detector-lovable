@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,11 +8,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { formatRevenueDisplayInput, parseRevenueInput } from "@/lib/revenue";
 import {
   GROSS_MARGIN_RANGES,
@@ -35,6 +30,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   const [sectorMenuOpen, setSectorMenuOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const sectorMenuRef = useRef<HTMLDivElement | null>(null);
 
   const parsedRevenue = useMemo(() => parseRevenueInput(revenue), [revenue]);
   const selectedBenchmark = sector ? getSectorBenchmark(sector) : null;
@@ -47,6 +43,33 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
         maximumFractionDigits: 1,
       }).format(parsedRevenue)
     : null;
+
+  useEffect(() => {
+    if (!sectorMenuOpen) return;
+
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node | null;
+      if (sectorMenuRef.current && target && !sectorMenuRef.current.contains(target)) {
+        setSectorMenuOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSectorMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown, { passive: true });
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [sectorMenuOpen]);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -145,12 +168,13 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               </p>
             )}
           </div>
-          <Popover open={sectorMenuOpen} onOpenChange={setSectorMenuOpen}>
-            <PopoverTrigger asChild>
+          <div ref={sectorMenuRef} className="relative">
               <button
                 id="sector"
                 type="button"
                 aria-expanded={sectorMenuOpen}
+                aria-haspopup="listbox"
+                onClick={() => setSectorMenuOpen((open) => !open)}
                 className={`touch-target flex h-12 w-full items-center justify-between rounded-xl border bg-surface px-4 text-left text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
                   errors.sector && touched.sector
                     ? "border-destructive/40 ring-1 ring-destructive/10"
@@ -162,38 +186,37 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 </span>
                 <ChevronsUpDown className="h-4 w-4 shrink-0 text-muted-foreground/80" />
               </button>
-            </PopoverTrigger>
-            <PopoverContent
-              align="start"
-              side="bottom"
-              sideOffset={8}
-              avoidCollisions={false}
-              className="w-[var(--radix-popover-trigger-width)] rounded-xl border-border bg-card p-1 shadow-premium"
-            >
-              <div className="max-h-72 overflow-y-auto pr-1">
-              {SECTOR_OPTIONS.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => {
-                    setSector(option.value);
-                    setTouched((current) => ({ ...current, sector: true }));
-                    setErrors((current) => ({ ...current, sector: "" }));
-                    setSectorMenuOpen(false);
-                  }}
-                  className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                    sector === option.value
-                      ? "bg-primary/[0.08] text-primary"
-                      : "text-foreground hover:bg-primary/[0.04]"
-                  }`}
-                >
-                  <span className="min-w-0">{option.label}</span>
-                  {sector === option.value ? <Check className="h-4 w-4 shrink-0" /> : null}
-                </button>
-              ))}
+            {sectorMenuOpen ? (
+              <div
+                role="listbox"
+                aria-labelledby="sector"
+                className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 rounded-xl border border-border bg-card p-1 shadow-premium"
+              >
+                <div className="max-h-72 overflow-y-auto pr-1">
+                  {SECTOR_OPTIONS.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => {
+                        setSector(option.value);
+                        setTouched((current) => ({ ...current, sector: true }));
+                        setErrors((current) => ({ ...current, sector: "" }));
+                        setSectorMenuOpen(false);
+                      }}
+                      className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                        sector === option.value
+                          ? "bg-primary/[0.08] text-primary"
+                          : "text-foreground hover:bg-primary/[0.04]"
+                      }`}
+                    >
+                      <span className="min-w-0">{option.label}</span>
+                      {sector === option.value ? <Check className="h-4 w-4 shrink-0" /> : null}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </PopoverContent>
-          </Popover>
+            ) : null}
+          </div>
           {selectedBenchmark && (
             <div className="bg-primary/5 rounded-lg px-3.5 py-2.5 border border-primary/15">
               <p className="text-xs text-muted-foreground leading-relaxed">
