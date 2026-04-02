@@ -36,7 +36,7 @@ export const HeroSection = () => {
       </div>
 
       {/* Hero content */}
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-28 sm:pb-36 text-center">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-24 sm:pb-30 text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-4 py-1.5 text-xs font-semibold text-hero-foreground mb-8 backdrop-blur-sm">
           <TrendingUp className="h-3 w-3" />
           Gross Margin Benchmark Estimator
