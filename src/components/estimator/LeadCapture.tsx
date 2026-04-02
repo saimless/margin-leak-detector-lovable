@@ -25,7 +25,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
 
   if (submitted) {
     return (
-      <div className="bg-card rounded-2xl shadow-premium border border-border px-6 sm:px-10 py-12 text-center">
+      <div className="card-shell px-4 py-10 text-center xs:px-5 sm:px-8 sm:py-12 lg:px-10">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-success/10 mb-5">
           <CheckCircle2 className="h-7 w-7 text-success" />
         </div>
@@ -38,9 +38,9 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
   }
 
   return (
-    <div className="bg-card rounded-2xl shadow-premium border border-border overflow-hidden">
-      <div className="bg-primary px-6 sm:px-10 py-1" />
-      <div className="px-6 sm:px-10 pt-8 pb-4">
+    <div className="card-shell">
+      <div className="card-header-accent" />
+      <div className="card-section pb-4 pt-6 xs:pt-7 sm:pt-8">
         <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-3">
           <div className="w-5 h-[2px] bg-primary rounded-full" />
           Personalized Report
@@ -53,8 +53,8 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="px-6 sm:px-10 py-6 space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className="card-section space-y-4 py-5 xs:py-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="name" className="text-sm font-semibold">Name *</Label>
             <Input
@@ -63,7 +63,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
               required
-              className="h-11 bg-surface border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="touch-target h-11 rounded-xl border-border bg-surface focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div className="space-y-1.5">
@@ -75,7 +75,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@company.com"
               required
-              className="h-11 bg-surface border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="touch-target h-11 rounded-xl border-border bg-surface focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -88,7 +88,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             placeholder="Company name"
-            className="h-11 bg-surface border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="touch-target h-11 rounded-xl border-border bg-surface focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
 
@@ -96,7 +96,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
           <Button
             type="submit"
             size="lg"
-            className="w-full h-12 text-base font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-elevated hover:shadow-highlight transition-all duration-300 group"
+            className="group h-12 w-full rounded-xl bg-primary text-base font-semibold text-primary-foreground shadow-elevated transition-all duration-300 hover:bg-primary/90 hover:shadow-highlight"
           >
             <Send className="h-4 w-4 mr-2 transition-transform group-hover:-translate-y-0.5" />
             Send my breakdown

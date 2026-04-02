@@ -60,19 +60,19 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
   const copy = benchmarkStateCopy[result.marginBenchmarkState];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 xs:space-y-5">
       {/* Main results card */}
-      <div className="bg-card rounded-2xl shadow-premium border border-border overflow-hidden">
+      <div className="card-shell">
         {/* Blue accent bar */}
-        <div className="bg-primary px-6 sm:px-10 py-1" />
+        <div className="card-header-accent" />
 
         {/* Header */}
-        <div className="bg-primary/[0.03] border-b border-border px-6 sm:px-10 py-8 sm:py-10">
+        <div className="card-section border-b border-border bg-primary/[0.03] py-6 xs:py-7 sm:py-9">
           <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
             <div className="w-5 h-[2px] bg-primary rounded-full" />
             Analysis Results
           </div>
-          <h2 className="font-display text-2xl sm:text-3xl font-800 tracking-tight leading-tight text-foreground mb-3">
+          <h2 className="font-display mb-3 text-2xl font-800 leading-tight tracking-tight text-foreground sm:text-3xl">
             Gross margin improvement scenarios
           </h2>
           <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
@@ -80,23 +80,23 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           </p>
         </div>
 
-        <div className="px-6 sm:px-10 py-8 space-y-6">
+        <div className="card-section space-y-5 py-5 xs:space-y-6 xs:py-6 sm:py-8">
           {/* Input summary */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid gap-3 xs:grid-cols-2 lg:grid-cols-3">
             {[
               { label: "Revenue", value: formatEuro(result.revenue) },
               { label: "Sector", value: result.sector },
               { label: "Gross margin", value: result.grossMarginRange },
             ].map((item) => (
-              <div key={item.label} className="bg-surface rounded-xl px-4 py-3 border border-border">
+              <div key={item.label} className="min-w-0 rounded-xl border border-border bg-surface px-4 py-3">
                 <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mb-1">{item.label}</p>
-                <p className="text-sm font-semibold text-foreground truncate">{item.value}</p>
+                <p className="text-sm font-semibold text-foreground break-words">{item.value}</p>
               </div>
             ))}
           </div>
 
           {/* Scenarios */}
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-3 xl:grid-cols-3">
             {result.scenarios.map((scenario) => {
               const scenarioMeta = scenarioCopy[scenario.label];
               const isFocused = scenario.label === "midpoint";
@@ -104,41 +104,41 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               return (
                 <div
                   key={scenario.label}
-                  className={`rounded-xl border px-5 py-5 text-left transition-all duration-200 ${
+                  className={`relative rounded-xl border px-4 py-4 text-left transition-all duration-200 xs:px-5 xs:py-5 ${
                     isFocused
-                      ? "border-primary/30 bg-primary/[0.04] shadow-highlight ring-1 ring-primary/15 relative"
+                      ? "border-primary/30 bg-primary/[0.04] shadow-highlight ring-1 ring-primary/15"
                       : "border-border bg-surface hover:bg-surface-elevated"
                   }`}
                 >
                   {isFocused && (
-                    <div className="absolute -top-2.5 left-4">
-                      <Badge className="bg-primary text-primary-foreground text-[10px] font-semibold px-2 py-0.5 shadow-sm">
+                    <div className="absolute left-4 top-4 xs:-top-2.5">
+                      <Badge className="bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground shadow-sm">
                         Recommended focus
                       </Badge>
                     </div>
                   )}
 
-                  <div className="flex items-center gap-2 mb-4 mt-1">
-                    <span className="text-base">{scenarioMeta.icon}</span>
-                    <div>
+                  <div className={`mb-4 flex items-center gap-2 ${isFocused ? "mt-7 xs:mt-1" : "mt-1"}`}>
+                    <span className="text-base shrink-0">{scenarioMeta.icon}</span>
+                    <div className="min-w-0">
                       <p className="text-sm font-semibold text-foreground">{scenarioMeta.title}</p>
                       <p className="text-[11px] text-muted-foreground">{scenarioMeta.subtitle}</p>
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <div>
+                  <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+                    <div className="min-w-0">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Target margin</p>
                       <p className="text-lg font-bold text-foreground tabular-nums">{formatPercent(scenario.targetMargin)}</p>
                     </div>
-                    <div className="h-px bg-border" />
-                    <div>
+                    <div className="hidden h-px bg-border xl:block" />
+                    <div className="min-w-0">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Est. gross profit</p>
-                      <p className="text-lg font-bold text-foreground tabular-nums">{formatEuro(scenario.grossProfitScenario)}</p>
+                      <p className="text-lg font-bold text-foreground tabular-nums break-words">{formatEuro(scenario.grossProfitScenario)}</p>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Improvement</p>
-                      <p className={`text-base font-bold tabular-nums ${isFocused ? "text-primary" : "text-success"}`}>
+                      <p className={`text-base font-bold tabular-nums break-words ${isFocused ? "text-primary" : "text-success"}`}>
                         +{formatEuro(scenario.grossProfitImprovement)}
                       </p>
                     </div>
@@ -151,7 +151,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           <div className="h-px bg-border" />
 
           {/* Analysis context */}
-          <div className="rounded-xl border border-border bg-surface px-5 py-5">
+          <div className="rounded-xl border border-border bg-surface px-4 py-4 xs:px-5 xs:py-5">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="h-4 w-4 text-primary" />
               <p className="text-sm font-semibold text-foreground">{copy.headline}</p>
@@ -163,7 +163,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           </div>
 
           {/* How it works */}
-          <div className="rounded-xl border border-border bg-surface px-5 py-5">
+          <div className="rounded-xl border border-border bg-surface px-4 py-4 xs:px-5 xs:py-5">
             <div className="flex items-center gap-2 mb-3">
               <Target className="h-4 w-4 text-primary" />
               <p className="text-sm font-semibold text-foreground">How this works</p>
@@ -179,10 +179,10 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           </div>
 
           {/* Benchmark detail */}
-          <div className="rounded-xl bg-primary/[0.04] border border-primary/15 px-5 py-5">
+          <div className="rounded-xl border border-primary/15 bg-primary/[0.04] px-4 py-4 xs:px-5 xs:py-5">
             <div className="flex items-start gap-3">
               <BarChart3 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-              <div className="space-y-2">
+              <div className="min-w-0 space-y-2">
                 <p className="text-sm font-semibold text-foreground">Benchmark reference</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   Sector anchor: {result.benchmarkGrossMargin} · Band: {result.benchmarkGrossMarginBand}
@@ -200,9 +200,9 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
       </div>
 
       {/* CTA card */}
-      <div className="bg-card rounded-2xl shadow-premium border border-border overflow-hidden">
-        <div className="bg-primary px-6 sm:px-10 py-1" />
-        <div className="px-6 sm:px-10 py-8 sm:py-10">
+      <div className="card-shell">
+        <div className="card-header-accent" />
+        <div className="card-section py-6 xs:py-7 sm:py-9">
           <div className="text-center space-y-5">
             <div className="flex items-center justify-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider">
               <div className="w-5 h-[2px] bg-primary rounded-full" />
@@ -218,7 +218,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               <Button
                 asChild
                 size="lg"
-                className="w-full sm:w-auto h-12 px-8 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-elevated hover:shadow-highlight transition-all duration-300 group"
+                className="group h-12 w-full rounded-xl bg-primary px-6 text-base font-semibold text-primary-foreground shadow-elevated transition-all duration-300 hover:bg-primary/90 hover:shadow-highlight sm:w-auto sm:px-8"
               >
                 <a href="https://www.saimless.com" target="_blank" rel="noreferrer">
                   Get a deeper margin analysis
@@ -229,7 +229,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                 onClick={onReset}
                 variant="ghost"
                 size="lg"
-                className="w-full sm:w-auto h-12 text-sm text-muted-foreground hover:text-foreground"
+                className="h-12 w-full text-sm text-muted-foreground hover:text-foreground sm:w-auto"
               >
                 <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
                 Try another scenario

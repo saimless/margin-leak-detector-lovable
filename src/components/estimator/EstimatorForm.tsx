@@ -59,15 +59,15 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   };
 
   return (
-    <div className="bg-card rounded-2xl shadow-premium border border-border overflow-hidden">
+    <div className="card-shell">
       {/* Header with blue accent bar */}
-      <div className="bg-primary px-6 sm:px-10 py-1" />
-      <div className="px-6 sm:px-10 pt-8 sm:pt-10 pb-4">
+      <div className="card-header-accent" />
+      <div className="card-section pb-4 pt-6 xs:pt-7 sm:pt-9">
         <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-3">
           <div className="w-5 h-[2px] bg-primary rounded-full" />
           Margin Estimator
         </div>
-        <h2 className="font-display text-xl sm:text-2xl font-700 text-foreground mb-1.5">
+        <h2 className="font-display text-xl font-700 text-foreground mb-1.5 sm:text-2xl">
           Estimate your gross margin opportunity
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
@@ -75,11 +75,11 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
         </p>
       </div>
 
-      <div className="px-6 sm:px-10 pb-2">
+      <div className="card-section pb-2">
         <div className="h-px bg-border" />
       </div>
 
-      <form onSubmit={handleSubmit} className="px-6 sm:px-10 py-6 sm:py-8 space-y-7">
+      <form onSubmit={handleSubmit} className="card-section space-y-6 py-5 xs:space-y-7 xs:py-6 sm:py-8">
         {/* Revenue */}
         <div className="space-y-2.5">
           <Label htmlFor="revenue" className="text-sm font-semibold text-foreground">
@@ -110,13 +110,13 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 }));
               }}
               placeholder="e.g. 12.500.000 or 12.5M"
-              className={`h-12 pl-8 text-base bg-surface border-border rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all ${errors.revenue && touched.revenue ? "border-destructive ring-destructive/10" : ""}`}
+              className={`touch-target h-12 rounded-xl border-border bg-surface pl-8 text-base transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 ${errors.revenue && touched.revenue ? "border-destructive ring-destructive/10" : ""}`}
             />
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-2 xs:flex-row xs:items-center xs:justify-between">
             <p className="text-xs text-muted-foreground">Enter your best estimate of annual revenue.</p>
             {revenuePreview && (
-              <p className="text-xs font-semibold text-primary bg-highlight-soft px-2.5 py-1 rounded-md border border-primary/10">
+              <p className="w-fit text-xs font-semibold text-primary bg-highlight-soft px-2.5 py-1 rounded-md border border-primary/10">
                 ≈ {revenuePreview}
               </p>
             )}
@@ -131,7 +131,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
         {/* Sector */}
         <div className="space-y-2.5">
           <Label className="text-sm font-semibold text-foreground">Sector</Label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
             {SECTOR_OPTIONS.map((option) => (
               <button
                 key={option.value}
@@ -141,13 +141,13 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                   setTouched((current) => ({ ...current, sector: true }));
                   setErrors((e) => ({ ...e, sector: "" }));
                 }}
-                className={`group px-4 py-3.5 rounded-xl border text-sm font-medium text-left transition-all duration-200 flex items-center justify-between
+                className={`group touch-target flex items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-all duration-200
                   ${sector === option.value
                     ? "border-primary bg-primary/5 text-primary shadow-sm ring-1 ring-primary/20"
                     : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/[0.02]"
                   } ${errors.sector && touched.sector ? "border-destructive/30" : ""}`}
               >
-                <span>{option.label}</span>
+                <span className="min-w-0">{option.label}</span>
                 <ChevronRight className={`h-3.5 w-3.5 transition-all duration-200 ${
                   sector === option.value ? "text-primary opacity-100" : "text-muted-foreground opacity-0 group-hover:opacity-50"
                 }`} />
@@ -177,7 +177,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
             </Label>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button type="button" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Gross margin explanation">
+                <button type="button" className="touch-target inline-flex min-w-11 items-center justify-center text-muted-foreground transition-colors hover:text-primary" aria-label="Gross margin explanation">
                   <Info className="h-3.5 w-3.5" />
                 </button>
               </TooltipTrigger>
@@ -189,7 +189,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           <p className="text-xs text-muted-foreground">
             Select the range that best reflects your current business performance.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {GROSS_MARGIN_RANGES.map((range) => (
               <button
                 key={range}
@@ -199,7 +199,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                   setTouched((current) => ({ ...current, margin: true }));
                   setErrors((e) => ({ ...e, margin: "" }));
                 }}
-                className={`px-3 py-3 rounded-xl border text-sm font-medium text-center transition-all duration-200
+                className={`touch-target rounded-xl border px-3 py-3 text-center text-sm font-medium transition-all duration-200
                   ${grossMarginRange === range
                     ? "border-primary bg-primary/5 text-primary shadow-sm ring-1 ring-primary/20"
                     : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/[0.02]"
@@ -220,7 +220,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           <Button
             type="submit"
             size="lg"
-            className="w-full h-13 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-elevated hover:shadow-highlight transition-all duration-300 group"
+            className="group h-12 w-full rounded-xl bg-primary text-base font-semibold text-primary-foreground shadow-elevated transition-all duration-300 hover:bg-primary/90 hover:shadow-highlight sm:h-13"
           >
             Calculate my gross margin estimate
             <ArrowRight className="h-4 w-4 ml-1.5 transition-transform group-hover:translate-x-0.5" />

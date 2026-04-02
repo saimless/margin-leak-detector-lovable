@@ -88,9 +88,9 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <HeroSection />
 
-      <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background pointer-events-none h-64" />
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20 pb-20 sm:pb-28">
+      <main className="relative isolate">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-primary/8 via-background to-background" />
+        <div className="content-shell relative -mt-14 pb-16 xs:-mt-16 xs:pb-20 sm:-mt-20 sm:pb-24 lg:pb-28">
           <AnimatePresence mode="wait">
             {!result ? (
               <motion.div
@@ -119,7 +119,7 @@ const Index = () => {
             )}
           </AnimatePresence>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </div>
