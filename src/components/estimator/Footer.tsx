@@ -7,7 +7,7 @@ export const Footer = () => {
         <div className="flex flex-col items-center gap-4">
           <a href="https://www.saimless.com" target="_blank" rel="noreferrer" className="flex items-center gap-2.5 group">
             <img src={saimlessLogo} alt="SAImless" className="h-8 w-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
-            <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+            <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors font-brand">
               S<span className="text-primary">AI</span>mless
             </span>
           </a>
