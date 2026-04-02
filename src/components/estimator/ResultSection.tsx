@@ -62,9 +62,12 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
   return (
     <div className="space-y-5">
       {/* Main results card */}
-      <div className="bg-card rounded-2xl shadow-premium border border-border/50 overflow-hidden">
-        {/* Header - light blue branded */}
-        <div className="bg-primary/[0.04] border-b border-primary/10 px-6 sm:px-10 py-8 sm:py-10">
+      <div className="bg-card rounded-2xl shadow-premium border border-border overflow-hidden">
+        {/* Blue accent bar */}
+        <div className="bg-primary px-6 sm:px-10 py-1" />
+
+        {/* Header */}
+        <div className="bg-primary/[0.03] border-b border-border px-6 sm:px-10 py-8 sm:py-10">
           <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider mb-4">
             <div className="w-5 h-[2px] bg-primary rounded-full" />
             Analysis Results
@@ -85,7 +88,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               { label: "Sector", value: result.sector },
               { label: "Gross margin", value: result.grossMarginRange },
             ].map((item) => (
-              <div key={item.label} className="bg-secondary/60 rounded-xl px-4 py-3 border border-border/40">
+              <div key={item.label} className="bg-surface rounded-xl px-4 py-3 border border-border">
                 <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mb-1">{item.label}</p>
                 <p className="text-sm font-semibold text-foreground truncate">{item.value}</p>
               </div>
@@ -103,8 +106,8 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                   key={scenario.label}
                   className={`rounded-xl border px-5 py-5 text-left transition-all duration-200 ${
                     isFocused
-                      ? "border-primary/25 bg-highlight-soft shadow-highlight ring-1 ring-primary/10 relative"
-                      : "border-border/50 bg-secondary/30 hover:bg-secondary/50"
+                      ? "border-primary/30 bg-primary/[0.04] shadow-highlight ring-1 ring-primary/15 relative"
+                      : "border-border bg-surface hover:bg-surface-elevated"
                   }`}
                 >
                   {isFocused && (
@@ -128,7 +131,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Target margin</p>
                       <p className="text-lg font-bold text-foreground tabular-nums">{formatPercent(scenario.targetMargin)}</p>
                     </div>
-                    <div className="h-px bg-border/60" />
+                    <div className="h-px bg-border" />
                     <div>
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Est. gross profit</p>
                       <p className="text-lg font-bold text-foreground tabular-nums">{formatEuro(scenario.grossProfitScenario)}</p>
@@ -145,10 +148,10 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
             })}
           </div>
 
-          <div className="h-px bg-border/60" />
+          <div className="h-px bg-border" />
 
           {/* Analysis context */}
-          <div className="rounded-xl border border-border/50 bg-secondary/30 px-5 py-5">
+          <div className="rounded-xl border border-border bg-surface px-5 py-5">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="h-4 w-4 text-primary" />
               <p className="text-sm font-semibold text-foreground">{copy.headline}</p>
@@ -160,7 +163,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           </div>
 
           {/* How it works */}
-          <div className="rounded-xl border border-border/50 bg-secondary/30 px-5 py-5">
+          <div className="rounded-xl border border-border bg-surface px-5 py-5">
             <div className="flex items-center gap-2 mb-3">
               <Target className="h-4 w-4 text-primary" />
               <p className="text-sm font-semibold text-foreground">How this works</p>
@@ -176,7 +179,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           </div>
 
           {/* Benchmark detail */}
-          <div className="rounded-xl bg-highlight-soft/60 border border-primary/10 px-5 py-5">
+          <div className="rounded-xl bg-primary/[0.04] border border-primary/15 px-5 py-5">
             <div className="flex items-start gap-3">
               <BarChart3 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
               <div className="space-y-2">
@@ -197,38 +200,41 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
       </div>
 
       {/* CTA card */}
-      <div className="bg-card rounded-2xl shadow-premium border border-border/50 px-6 sm:px-10 py-8 sm:py-10">
-        <div className="text-center space-y-5">
-          <div className="flex items-center justify-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider">
-            <div className="w-5 h-[2px] bg-primary rounded-full" />
-            Next Step
-          </div>
-          <h3 className="font-display text-lg sm:text-xl font-700 text-foreground">
-            Want deeper gross margin insights?
-          </h3>
-          <p className="text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
-            Go beyond benchmarks with AI-driven analysis of your pricing, product mix, and sales performance. Discover where margin is created, where it's lost, and how to improve it.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
-            <Button
-              asChild
-              size="lg"
-              className="w-full sm:w-auto h-12 px-8 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 shadow-elevated hover:shadow-highlight transition-all duration-300 group"
-            >
-              <a href="https://www.saimless.com" target="_blank" rel="noreferrer">
-                Get a deeper margin analysis
-                <ArrowRight className="h-4 w-4 ml-1.5 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </Button>
-            <Button
-              onClick={onReset}
-              variant="ghost"
-              size="lg"
-              className="w-full sm:w-auto h-12 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-              Try another scenario
-            </Button>
+      <div className="bg-card rounded-2xl shadow-premium border border-border overflow-hidden">
+        <div className="bg-primary px-6 sm:px-10 py-1" />
+        <div className="px-6 sm:px-10 py-8 sm:py-10">
+          <div className="text-center space-y-5">
+            <div className="flex items-center justify-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider">
+              <div className="w-5 h-[2px] bg-primary rounded-full" />
+              Next Step
+            </div>
+            <h3 className="font-display text-lg sm:text-xl font-700 text-foreground">
+              Want deeper gross margin insights?
+            </h3>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
+              Go beyond benchmarks with AI-driven analysis of your pricing, product mix, and sales performance. Discover where margin is created, where it's lost, and how to improve it.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
+              <Button
+                asChild
+                size="lg"
+                className="w-full sm:w-auto h-12 px-8 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-elevated hover:shadow-highlight transition-all duration-300 group"
+              >
+                <a href="https://www.saimless.com" target="_blank" rel="noreferrer">
+                  Get a deeper margin analysis
+                  <ArrowRight className="h-4 w-4 ml-1.5 transition-transform group-hover:translate-x-0.5" />
+                </a>
+              </Button>
+              <Button
+                onClick={onReset}
+                variant="ghost"
+                size="lg"
+                className="w-full sm:w-auto h-12 text-sm text-muted-foreground hover:text-foreground"
+              >
+                <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
+                Try another scenario
+              </Button>
+            </div>
           </div>
         </div>
       </div>
