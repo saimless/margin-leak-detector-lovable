@@ -16,8 +16,8 @@ export const Footer = () => {
               This tool provides directional estimates based on benchmark data. Actual results depend on your business
               model, execution, and market conditions.
             </p>
-            <p className="text-xs text-muted-foreground/70">
-              © {new Date().getFullYear()} SAImless. All rights reserved.
+            <p className="text-xs leading-relaxed text-muted-foreground/70">
+              © {new Date().getFullYear()} SAImless. All rights reserved. The SAImless name and logo are the property of SAImless.
             </p>
           </div>
         </div>
