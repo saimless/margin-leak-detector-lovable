@@ -24,7 +24,7 @@ export const HeroSection = () => {
         <div className="flex items-center justify-between">
           <a href="https://www.saimless.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 group">
             <img src={saimlessLogo} alt="SAImless" className="h-12 w-12 object-contain rounded-full bg-primary-foreground/10 p-0.5" />
-            <span className="text-[17px] font-bold tracking-tight text-hero-foreground">
+            <span className="text-[17px] font-bold tracking-tight text-hero-foreground font-brand">
               S<span className="opacity-90">AI</span>mless
             </span>
           </a>
