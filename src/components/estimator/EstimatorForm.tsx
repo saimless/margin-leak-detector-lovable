@@ -2,12 +2,19 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Info, ChevronRight } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { formatRevenueDisplayInput, parseRevenueInput } from "@/lib/revenue";
 import {
   GROSS_MARGIN_RANGES,
@@ -32,6 +39,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
 
   const parsedRevenue = useMemo(() => parseRevenueInput(revenue), [revenue]);
   const selectedBenchmark = sector ? getSectorBenchmark(sector) : null;
+  const selectedSectorLabel = SECTOR_OPTIONS.find((option) => option.value === sector)?.label;
   const revenuePreview = parsedRevenue
     ? new Intl.NumberFormat("en", {
         style: "currency",
@@ -130,30 +138,44 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
 
         {/* Sector */}
         <div className="space-y-2.5">
-          <Label className="text-sm font-semibold text-foreground">Sector</Label>
-          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-            {SECTOR_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => {
-                  setSector(option.value);
-                  setTouched((current) => ({ ...current, sector: true }));
-                  setErrors((e) => ({ ...e, sector: "" }));
-                }}
-                className={`group touch-target flex items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-all duration-200
-                  ${sector === option.value
-                    ? "border-primary bg-primary/5 text-primary shadow-sm ring-1 ring-primary/20"
-                    : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/[0.02]"
-                  } ${errors.sector && touched.sector ? "border-destructive/30" : ""}`}
-              >
-                <span className="min-w-0">{option.label}</span>
-                <ChevronRight className={`h-3.5 w-3.5 transition-all duration-200 ${
-                  sector === option.value ? "text-primary opacity-100" : "text-muted-foreground opacity-0 group-hover:opacity-50"
-                }`} />
-              </button>
-            ))}
+          <div className="flex flex-col gap-2 xs:flex-row xs:items-center xs:justify-between">
+            <Label htmlFor="sector" className="text-sm font-semibold text-foreground">Sector</Label>
+            {selectedSectorLabel && (
+              <p className="w-fit rounded-md border border-primary/10 bg-highlight-soft px-2.5 py-1 text-xs font-semibold text-primary">
+                {selectedSectorLabel}
+              </p>
+            )}
           </div>
+          <Select
+            value={sector}
+            onValueChange={(value) => {
+              setSector(value as Sector);
+              setTouched((current) => ({ ...current, sector: true }));
+              setErrors((current) => ({ ...current, sector: "" }));
+            }}
+          >
+            <SelectTrigger
+              id="sector"
+              className={`touch-target h-12 rounded-xl border bg-surface px-4 text-left text-sm shadow-sm transition-all focus:ring-primary/20 ${
+                errors.sector && touched.sector
+                  ? "border-destructive/40 ring-1 ring-destructive/10"
+                  : "border-border hover:border-primary/40"
+              }`}
+            >
+              <SelectValue placeholder="Select your sector" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border bg-card p-1 shadow-premium">
+              {SECTOR_OPTIONS.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="min-h-11 rounded-lg py-2.5 pl-8 pr-3 text-sm font-medium text-foreground focus:bg-primary/[0.06] focus:text-foreground"
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {selectedBenchmark && (
             <div className="bg-primary/5 rounded-lg px-3.5 py-2.5 border border-primary/15">
               <p className="text-xs text-muted-foreground leading-relaxed">
