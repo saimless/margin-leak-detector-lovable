@@ -2,19 +2,17 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight, Check, ChevronsUpDown, Info } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { formatRevenueDisplayInput, parseRevenueInput } from "@/lib/revenue";
 import {
   GROSS_MARGIN_RANGES,
@@ -34,6 +32,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   const [revenue, setRevenue] = useState("");
   const [sector, setSector] = useState<Sector | "">("");
   const [grossMarginRange, setGrossMarginRange] = useState<GrossMarginRange | "">("");
+  const [sectorMenuOpen, setSectorMenuOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
@@ -146,36 +145,55 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               </p>
             )}
           </div>
-          <Select
-            value={sector}
-            onValueChange={(value) => {
-              setSector(value as Sector);
-              setTouched((current) => ({ ...current, sector: true }));
-              setErrors((current) => ({ ...current, sector: "" }));
-            }}
-          >
-            <SelectTrigger
-              id="sector"
-              className={`touch-target h-12 rounded-xl border bg-surface px-4 text-left text-sm shadow-sm transition-all focus:ring-primary/20 ${
-                errors.sector && touched.sector
-                  ? "border-destructive/40 ring-1 ring-destructive/10"
-                  : "border-border hover:border-primary/40"
-              }`}
+          <Popover open={sectorMenuOpen} onOpenChange={setSectorMenuOpen}>
+            <PopoverTrigger asChild>
+              <button
+                id="sector"
+                type="button"
+                aria-expanded={sectorMenuOpen}
+                className={`touch-target flex h-12 w-full items-center justify-between rounded-xl border bg-surface px-4 text-left text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                  errors.sector && touched.sector
+                    ? "border-destructive/40 ring-1 ring-destructive/10"
+                    : "border-border hover:border-primary/40"
+                }`}
+              >
+                <span className={sector ? "text-foreground" : "text-muted-foreground"}>
+                  {selectedSectorLabel ?? "Select your sector"}
+                </span>
+                <ChevronsUpDown className="h-4 w-4 shrink-0 text-muted-foreground/80" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="start"
+              side="bottom"
+              sideOffset={8}
+              avoidCollisions={false}
+              className="w-[var(--radix-popover-trigger-width)] rounded-xl border-border bg-card p-1 shadow-premium"
             >
-              <SelectValue placeholder="Select your sector" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-border bg-card p-1 shadow-premium">
+              <div className="max-h-72 overflow-y-auto pr-1">
               {SECTOR_OPTIONS.map((option) => (
-                <SelectItem
+                <button
                   key={option.value}
-                  value={option.value}
-                  className="min-h-11 rounded-lg py-2.5 pl-8 pr-3 text-sm font-medium text-foreground focus:bg-primary/[0.06] focus:text-foreground"
+                  type="button"
+                  onClick={() => {
+                    setSector(option.value);
+                    setTouched((current) => ({ ...current, sector: true }));
+                    setErrors((current) => ({ ...current, sector: "" }));
+                    setSectorMenuOpen(false);
+                  }}
+                  className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                    sector === option.value
+                      ? "bg-primary/[0.08] text-primary"
+                      : "text-foreground hover:bg-primary/[0.04]"
+                  }`}
                 >
-                  {option.label}
-                </SelectItem>
+                  <span className="min-w-0">{option.label}</span>
+                  {sector === option.value ? <Check className="h-4 w-4 shrink-0" /> : null}
+                </button>
               ))}
-            </SelectContent>
-          </Select>
+              </div>
+            </PopoverContent>
+          </Popover>
           {selectedBenchmark && (
             <div className="bg-primary/5 rounded-lg px-3.5 py-2.5 border border-primary/15">
               <p className="text-xs text-muted-foreground leading-relaxed">
