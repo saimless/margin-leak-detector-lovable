@@ -47,7 +47,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   useEffect(() => {
     if (!sectorMenuOpen) return;
 
-    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+    const handleClick = (event: MouseEvent) => {
       const target = event.target as Node | null;
       if (sectorMenuRef.current && target && !sectorMenuRef.current.contains(target)) {
         setSectorMenuOpen(false);
@@ -60,13 +60,11 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
       }
     };
 
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("touchstart", handlePointerDown, { passive: true });
+    document.addEventListener("click", handleClick);
     document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("touchstart", handlePointerDown);
+      document.removeEventListener("click", handleClick);
       document.removeEventListener("keydown", handleEscape);
     };
   }, [sectorMenuOpen]);
@@ -190,7 +188,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               <div
                 role="listbox"
                 aria-labelledby="sector"
-                className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 rounded-xl border border-border bg-card p-1 shadow-premium"
+                className="mt-2 rounded-xl border border-border bg-card p-1 shadow-premium"
               >
                 <div className="max-h-72 overflow-y-auto pr-1">
                   {SECTOR_OPTIONS.map((option) => (
