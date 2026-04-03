@@ -5,83 +5,86 @@ import { EstimatorForm } from "@/components/estimator/EstimatorForm";
 import { ResultSection } from "@/components/estimator/ResultSection";
 import { Footer } from "@/components/estimator/Footer";
 import {
-  calculateGrossMarginScenarios,
-  calculateCogs,
-  formatBenchmarkRange,
+  calculateBenchmarkComparison,
+  calculateRevenueAfterDirectCostsMetrics,
   formatBenchmarkAnchor,
+  formatBenchmarkRange,
   getSectorBenchmark,
-  getMarginBenchmarkState,
   getSectorLabel,
-  parseGrossMarginRange,
-  calculateGrossProfit,
-  type MarginBenchmarkState,
-  type GrossMarginRange,
+  type BenchmarkBandPositionLabel,
+  type ComparisonState,
+  type PerformanceState,
   type Sector,
 } from "@/lib/estimator";
 
-type ScenarioLabel = "conservative" | "midpoint" | "optimized";
-
-export interface ScenarioResult {
-  label: ScenarioLabel;
-  targetMargin: number;
-  grossProfitScenario: number;
-  grossProfitImprovement: number;
+export interface UpsideEstimateResult {
+  title: string;
+  targetLabel: string;
+  targetPercentage: number;
+  additionalRevenueRemaining: number;
+  summary: string;
 }
 
 export interface EstimatorResult {
-  revenue: number;
+  annualRevenue: number;
+  annualCogs: number;
+  sectorKey: Sector;
   sector: string;
-  grossMarginRange: GrossMarginRange;
-  currentGrossMargin: number;
-  grossProfitCurrent: number;
-  estimatedCogs: number;
-  benchmarkGrossMargin: string;
-  benchmarkGrossMarginBand: string;
+  revenueAfterDirectCosts: number;
+  percentageRemaining: number;
+  benchmarkAnchor: string;
+  benchmarkRange: string;
   benchmarkLower: number;
   benchmarkMid: number;
   benchmarkUpper: number;
-  scenarios: ScenarioResult[];
-  marginBenchmarkState: MarginBenchmarkState;
+  comparisonState: ComparisonState;
+  performanceState: PerformanceState;
+  benchmarkBandPositionLabel: BenchmarkBandPositionLabel;
+  benchmarkBandPositionRaw: number;
+  benchmarkBandPositionClamped: number;
+  percentagePointGapToBandLow: number;
+  percentagePointGapToBandMid: number;
+  percentagePointGapToBandHigh: number;
+  upsideEstimate: UpsideEstimateResult;
 }
 
 const Index = () => {
   const [result, setResult] = useState<EstimatorResult | null>(null);
 
-  const handleCalculate = (revenue: number, sector: Sector, grossMarginRange: GrossMarginRange) => {
-    const grossMarginBounds = parseGrossMarginRange(grossMarginRange);
-    const currentGrossMargin = grossMarginBounds.midpoint;
+  const handleCalculate = (annualRevenue: number, annualCogs: number, sector: Sector) => {
     const sectorBenchmark = getSectorBenchmark(sector);
-    const improvement = calculateGrossMarginScenarios({
-      annualRevenue: revenue,
-      currentGrossMargin,
+    const metrics = calculateRevenueAfterDirectCostsMetrics(annualRevenue, annualCogs);
+    const comparison = calculateBenchmarkComparison({
+      annualRevenue,
+      percentageRemaining: metrics.percentageRemaining,
       sectorBenchmark,
     });
 
     setResult({
-      revenue,
+      annualRevenue,
+      annualCogs,
+      sectorKey: sector,
       sector: getSectorLabel(sector),
-      grossMarginRange,
-      currentGrossMargin,
-      grossProfitCurrent: calculateGrossProfit(revenue, currentGrossMargin),
-      estimatedCogs: calculateCogs(revenue, currentGrossMargin),
-      benchmarkGrossMargin: formatBenchmarkAnchor(improvement.benchmarkSummary.anchor),
-      benchmarkGrossMarginBand: formatBenchmarkRange(
-        improvement.benchmarkSummary.bandLow,
-        improvement.benchmarkSummary.bandHigh,
+      revenueAfterDirectCosts: metrics.revenueAfterDirectCosts,
+      percentageRemaining: metrics.percentageRemaining,
+      benchmarkAnchor: formatBenchmarkAnchor(comparison.benchmarkSummary.anchor),
+      benchmarkRange: formatBenchmarkRange(
+        comparison.benchmarkSummary.bandLow,
+        comparison.benchmarkSummary.bandHigh,
       ),
-      benchmarkLower: improvement.benchmarkLower,
-      benchmarkMid: improvement.benchmarkMid,
-      benchmarkUpper: improvement.benchmarkUpper,
-      scenarios: improvement.scenarios,
-      marginBenchmarkState: getMarginBenchmarkState({
-        currentGrossMargin,
-        sectorBenchmark,
-      }),
+      benchmarkLower: comparison.benchmarkLower,
+      benchmarkMid: comparison.benchmarkMid,
+      benchmarkUpper: comparison.benchmarkUpper,
+      comparisonState: comparison.comparisonState,
+      performanceState: comparison.performanceState,
+      benchmarkBandPositionLabel: comparison.benchmarkBandPosition.label,
+      benchmarkBandPositionRaw: comparison.benchmarkBandPosition.rawPosition,
+      benchmarkBandPositionClamped: comparison.benchmarkBandPosition.clampedPosition,
+      percentagePointGapToBandLow: comparison.percentagePointGapToBandLow,
+      percentagePointGapToBandMid: comparison.percentagePointGapToBandMid,
+      percentagePointGapToBandHigh: comparison.percentagePointGapToBandHigh,
+      upsideEstimate: comparison.upsideEstimate,
     });
-  };
-
-  const handleReset = () => {
-    setResult(null);
   };
 
   return (
@@ -111,10 +114,7 @@ const Index = () => {
                 transition={{ duration: 0.35, ease: "easeOut" }}
                 className="space-y-6"
               >
-                <ResultSection
-                  result={result}
-                  onReset={handleReset}
-                />
+                <ResultSection result={result} onReset={() => setResult(null)} />
               </motion.div>
             )}
           </AnimatePresence>

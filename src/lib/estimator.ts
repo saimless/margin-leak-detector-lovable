@@ -1,18 +1,3 @@
-export const MAX_GROSS_MARGIN_CAP = 0.8;
-
-export const GROSS_MARGIN_RANGES = [
-  "<15%",
-  "15–20%",
-  "20–25%",
-  "25–30%",
-  "30–40%",
-  "40–50%",
-  "50–65%",
-  "65%+",
-] as const;
-
-export type GrossMarginRange = (typeof GROSS_MARGIN_RANGES)[number];
-
 export const sectorBenchmarks = {
   distribution: { anchor: 0.3057, bandLow: 0.25, bandHigh: 0.35 },
   manufacturing_commodity: { anchor: 0.1584, bandLow: 0.1, bandHigh: 0.25 },
@@ -43,69 +28,67 @@ export const SECTOR_OPTIONS: Array<{ value: Sector; label: string }> = [
   { value: "construction_services", label: "Construction services" },
 ] as const;
 
-export interface GrossMarginBounds {
-  low: number;
-  high: number;
-  midpoint: number;
-}
-
 export interface SectorBenchmark {
   anchor: number;
   bandLow: number;
   bandHigh: number;
 }
 
-export interface GrossMarginScenario {
-  label: "conservative" | "midpoint" | "optimized";
-  targetMargin: number;
-  grossProfitScenario: number;
-  grossProfitImprovement: number;
+export interface RevenueAfterDirectCostsMetrics {
+  revenueAfterDirectCosts: number;
+  percentageRemaining: number;
 }
 
-export interface GrossMarginScenarioResult {
+export interface BenchmarkBandPosition {
+  rawPosition: number;
+  clampedPosition: number;
+  label: BenchmarkBandPositionLabel;
+}
+
+export interface UpsideEstimate {
+  title: string;
+  targetLabel: string;
+  targetPercentage: number;
+  additionalRevenueRemaining: number;
+  summary: string;
+}
+
+export interface RevenueComparisonResult {
   benchmarkLower: number;
   benchmarkMid: number;
   benchmarkUpper: number;
-  grossProfitCurrent: number;
-  scenarios: GrossMarginScenario[];
   benchmarkSummary: SectorBenchmark;
+  comparisonState: ComparisonState;
+  performanceState: PerformanceState;
+  benchmarkBandPosition: BenchmarkBandPosition;
+  percentagePointGapToBandLow: number;
+  percentagePointGapToBandMid: number;
+  percentagePointGapToBandHigh: number;
+  upsideEstimate: UpsideEstimate;
 }
 
-export type MarginBenchmarkState = "weak" | "average" | "strong";
+export type ComparisonState = "below" | "within" | "above";
 
-function clampToZero(value: number): number {
-  return Math.max(0, value);
-}
+export type PerformanceState =
+  | "below_benchmark_range"
+  | "within_lower_half"
+  | "within_upper_half"
+  | "above_benchmark_range";
 
-function roundValue(value: number): number {
+export type BenchmarkBandPositionLabel =
+  | "Below benchmark range"
+  | "Near lower end of benchmark band"
+  | "Lower half of benchmark band"
+  | "Upper half of benchmark band"
+  | "Upper quartile of benchmark band"
+  | "Above benchmark range";
+
+function roundCurrency(value: number): number {
   return Math.round(value);
 }
 
-export function parseGrossMarginRange(rangeLabel: string): GrossMarginBounds {
-  const normalized = rangeLabel.replace(/\s/g, "").replace(/-/g, "–");
-
-  if (normalized.startsWith("<")) {
-    const upperPercent = Number.parseFloat(normalized.replace(/[<%]/g, ""));
-    const high = upperPercent / 100;
-    return { low: 0, high, midpoint: high / 2 };
-  }
-
-  if (normalized.endsWith("+")) {
-    const lowerPercent = Number.parseFloat(normalized.replace(/[%+]/g, ""));
-    const low = lowerPercent / 100;
-    const high = Math.max(low, MAX_GROSS_MARGIN_CAP);
-    return { low, high, midpoint: (low + high) / 2 };
-  }
-
-  const [lowLabel, highLabel] = normalized.replace(/%/g, "").split("–");
-  const low = Number.parseFloat(lowLabel) / 100;
-  const high = Number.parseFloat(highLabel) / 100;
-
-  if (!Number.isFinite(low) || !Number.isFinite(high) || high < low) {
-    throw new Error(`Unsupported gross margin range: ${rangeLabel}`);
-  }
-
-  return { low, high, midpoint: (low + high) / 2 };
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }
 
 export function getSectorBenchmark(sector: Sector): SectorBenchmark {
@@ -124,69 +107,189 @@ export function formatBenchmarkAnchor(anchor: number): string {
   return `${Math.round(anchor * 100)}%`;
 }
 
-export function calculateGrossProfit(revenue: number, grossMargin: number): number {
-  return revenue * grossMargin;
+export function calculateRevenueAfterDirectCosts(annualRevenue: number, annualCogs: number): number {
+  return roundCurrency(annualRevenue - annualCogs);
 }
 
-export function calculateCogs(revenue: number, grossMargin: number): number {
-  return revenue - calculateGrossProfit(revenue, grossMargin);
+export function calculateRemainingPercentage(annualRevenue: number, annualCogs: number): number {
+  if (!Number.isFinite(annualRevenue) || annualRevenue <= 0) {
+    return 0;
+  }
+
+  return (annualRevenue - annualCogs) / annualRevenue;
 }
 
-export function getMarginBenchmarkState({
-  currentGrossMargin,
+export function calculateRevenueAfterDirectCostsMetrics(
+  annualRevenue: number,
+  annualCogs: number,
+): RevenueAfterDirectCostsMetrics {
+  return {
+    revenueAfterDirectCosts: calculateRevenueAfterDirectCosts(annualRevenue, annualCogs),
+    percentageRemaining: calculateRemainingPercentage(annualRevenue, annualCogs),
+  };
+}
+
+export function getComparisonState({
+  percentageRemaining,
   sectorBenchmark,
 }: {
-  currentGrossMargin: number;
+  percentageRemaining: number;
   sectorBenchmark: SectorBenchmark;
-}): MarginBenchmarkState {
-  const lowerHalfBoundary = sectorBenchmark.bandLow + (sectorBenchmark.bandHigh - sectorBenchmark.bandLow) * 0.5;
-  const meaningfulGap = 0.03;
-
-  if (currentGrossMargin < lowerHalfBoundary - meaningfulGap) {
-    return "weak";
+}): ComparisonState {
+  if (percentageRemaining < sectorBenchmark.bandLow) {
+    return "below";
   }
 
-  if (currentGrossMargin >= lowerHalfBoundary || currentGrossMargin >= sectorBenchmark.anchor) {
-    return "strong";
+  if (percentageRemaining > sectorBenchmark.bandHigh) {
+    return "above";
   }
 
-  return "average";
+  return "within";
 }
 
-export function calculateGrossMarginScenarios({
+export function calculateBenchmarkBandPosition({
+  percentageRemaining,
+  sectorBenchmark,
+}: {
+  percentageRemaining: number;
+  sectorBenchmark: SectorBenchmark;
+}): BenchmarkBandPosition {
+  const bandWidth = sectorBenchmark.bandHigh - sectorBenchmark.bandLow;
+  const rawPosition = bandWidth <= 0 ? 0 : ((percentageRemaining - sectorBenchmark.bandLow) / bandWidth) * 100;
+  const clampedPosition = clamp(rawPosition, 0, 100);
+
+  if (rawPosition < 0) {
+    return { rawPosition, clampedPosition, label: "Below benchmark range" };
+  }
+
+  if (rawPosition <= 15) {
+    return { rawPosition, clampedPosition, label: "Near lower end of benchmark band" };
+  }
+
+  if (rawPosition < 50) {
+    return { rawPosition, clampedPosition, label: "Lower half of benchmark band" };
+  }
+
+  if (rawPosition < 75) {
+    return { rawPosition, clampedPosition, label: "Upper half of benchmark band" };
+  }
+
+  if (rawPosition <= 100) {
+    return { rawPosition, clampedPosition, label: "Upper quartile of benchmark band" };
+  }
+
+  return { rawPosition, clampedPosition, label: "Above benchmark range" };
+}
+
+export function getPerformanceState({
+  percentageRemaining,
+  sectorBenchmark,
+}: {
+  percentageRemaining: number;
+  sectorBenchmark: SectorBenchmark;
+}): PerformanceState {
+  const comparisonState = getComparisonState({ percentageRemaining, sectorBenchmark });
+
+  if (comparisonState === "below") {
+    return "below_benchmark_range";
+  }
+
+  if (comparisonState === "above") {
+    return "above_benchmark_range";
+  }
+
+  return percentageRemaining < (sectorBenchmark.bandLow + sectorBenchmark.bandHigh) / 2
+    ? "within_lower_half"
+    : "within_upper_half";
+}
+
+export function calculateUpsideEstimate({
   annualRevenue,
-  currentGrossMargin,
+  percentageRemaining,
   sectorBenchmark,
 }: {
   annualRevenue: number;
-  currentGrossMargin: number;
+  percentageRemaining: number;
   sectorBenchmark: SectorBenchmark;
-}): GrossMarginScenarioResult {
+}): UpsideEstimate {
+  const performanceState = getPerformanceState({ percentageRemaining, sectorBenchmark });
+  const bandWidth = sectorBenchmark.bandHigh - sectorBenchmark.bandLow;
+  const benchmarkMid = (sectorBenchmark.bandLow + sectorBenchmark.bandHigh) / 2;
+  const benchmarkUpperQuartile = sectorBenchmark.bandLow + bandWidth * 0.75;
+  const stretchAboveBand = sectorBenchmark.bandHigh + bandWidth * 0.1;
+
+  let title = "Estimated improvement potential";
+  let targetLabel = "";
+  let targetPercentage = percentageRemaining;
+  let summary = "";
+
+  switch (performanceState) {
+    case "below_benchmark_range":
+      targetLabel = "benchmark midpoint";
+      targetPercentage = benchmarkMid;
+      summary =
+        "This uses the midpoint of the sector benchmark as a practical improvement target from your current position.";
+      break;
+    case "within_lower_half":
+      targetLabel = "upper half of the benchmark band";
+      targetPercentage = benchmarkUpperQuartile;
+      summary =
+        "This estimates the value of moving from the lower half of the benchmark band toward stronger in-band performance.";
+      break;
+    case "within_upper_half":
+      targetLabel = "top of the benchmark band";
+      targetPercentage = sectorBenchmark.bandHigh;
+      summary =
+        "This estimates the value of tightening pricing and leakage enough to move toward the top end of the benchmark band.";
+      break;
+    case "above_benchmark_range":
+      title = "Additional optimization upside";
+      targetLabel = "stretch performance above the benchmark";
+      targetPercentage = Math.max(percentageRemaining + bandWidth * 0.08, stretchAboveBand);
+      summary =
+        "This uses a modest stretch target above the benchmark band to reflect further gains from sharper pricing, mix, and decision precision.";
+      break;
+  }
+
+  return {
+    title,
+    targetLabel,
+    targetPercentage,
+    additionalRevenueRemaining: roundCurrency(
+      annualRevenue * Math.max(targetPercentage - percentageRemaining, 0),
+    ),
+    summary,
+  };
+}
+
+export function calculateBenchmarkComparison({
+  annualRevenue,
+  percentageRemaining,
+  sectorBenchmark,
+}: {
+  annualRevenue: number;
+  percentageRemaining: number;
+  sectorBenchmark: SectorBenchmark;
+}): RevenueComparisonResult {
   const benchmarkLower = sectorBenchmark.bandLow;
   const benchmarkMid = (sectorBenchmark.bandLow + sectorBenchmark.bandHigh) / 2;
   const benchmarkUpper = sectorBenchmark.bandHigh;
-  const grossProfitCurrent = roundValue(calculateGrossProfit(annualRevenue, currentGrossMargin));
-  const buildScenario = (label: GrossMarginScenario["label"], targetMargin: number): GrossMarginScenario => {
-    const grossProfitScenario = roundValue(calculateGrossProfit(annualRevenue, targetMargin));
-
-    return {
-      label,
-      targetMargin,
-      grossProfitScenario,
-      grossProfitImprovement: roundValue(clampToZero(grossProfitScenario - grossProfitCurrent)),
-    };
-  };
 
   return {
     benchmarkLower,
     benchmarkMid,
     benchmarkUpper,
-    grossProfitCurrent,
-    scenarios: [
-      buildScenario("conservative", benchmarkLower),
-      buildScenario("midpoint", benchmarkMid),
-      buildScenario("optimized", benchmarkUpper),
-    ],
     benchmarkSummary: sectorBenchmark,
+    comparisonState: getComparisonState({ percentageRemaining, sectorBenchmark }),
+    performanceState: getPerformanceState({ percentageRemaining, sectorBenchmark }),
+    benchmarkBandPosition: calculateBenchmarkBandPosition({ percentageRemaining, sectorBenchmark }),
+    percentagePointGapToBandLow: benchmarkLower - percentageRemaining,
+    percentagePointGapToBandMid: benchmarkMid - percentageRemaining,
+    percentagePointGapToBandHigh: benchmarkUpper - percentageRemaining,
+    upsideEstimate: calculateUpsideEstimate({
+      annualRevenue,
+      percentageRemaining,
+      sectorBenchmark,
+    }),
   };
 }

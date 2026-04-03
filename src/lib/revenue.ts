@@ -27,7 +27,7 @@ export const stageContent: Record<CompanyStage, StageContent> = {
     bodyPrimary:
       "At your current scale, margin differences are rarely structural — they are often the result of pricing, cost control, or operational inefficiencies.",
     bodySecondary:
-      "The gap with industry benchmarks suggests there are concrete opportunities to improve gross margin performance without changing your core business model.",
+      "The gap with industry benchmarks suggests there are concrete opportunities to improve the share of revenue that remains after direct product costs without changing your core business model.",
   },
   scale: {
     label: "Scale",
@@ -86,7 +86,7 @@ function normalizeNumericInput(rawValue: string, hasSuffix: boolean): string | n
   return `${whole}.${fractional}`;
 }
 
-export function parseRevenueInput(value: string): number | null {
+export function parseRevenueInput(value: string, options?: { allowZero?: boolean }): number | null {
   const trimmed = value.trim();
   if (!trimmed) {
     return null;
@@ -108,6 +108,10 @@ export function parseRevenueInput(value: string): number | null {
   }
 
   const revenue = parsed * multiplier;
+  if (options?.allowZero && revenue === 0) {
+    return 0;
+  }
+
   return revenue > 0 ? revenue : null;
 }
 

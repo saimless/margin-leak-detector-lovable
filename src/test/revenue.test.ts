@@ -37,6 +37,10 @@ describe("parseRevenueInput", () => {
     expect(parseRevenueInput("abc")).toBeNull();
     expect(parseRevenueInput("0")).toBeNull();
   });
+
+  it("can allow zero values for fields like cogs", () => {
+    expect(parseRevenueInput("0", { allowZero: true })).toBe(0);
+  });
 });
 
 describe("formatRevenueDisplayInput", () => {

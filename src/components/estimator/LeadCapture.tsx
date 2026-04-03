@@ -31,7 +31,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
         </div>
         <h3 className="font-display text-xl font-700 text-foreground mb-2">Thank you, {name}.</h3>
         <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-          We'll send your personalized gross margin breakdown to <strong className="text-foreground">{email}</strong> shortly.
+          We'll send your personalized revenue-after-direct-costs breakdown to <strong className="text-foreground">{email}</strong> shortly.
         </p>
       </div>
     );
