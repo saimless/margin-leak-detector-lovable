@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, Check, ChevronsUpDown, Info } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowRight, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { formatRevenueDisplayInput, parseRevenueInput } from "@/lib/revenue";
 import {
   SECTOR_OPTIONS,
@@ -29,10 +30,8 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   const [annualRevenue, setAnnualRevenue] = useState("");
   const [annualCogs, setAnnualCogs] = useState("");
   const [sector, setSector] = useState<Sector | "">("");
-  const [sectorMenuOpen, setSectorMenuOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const sectorMenuRef = useRef<HTMLDivElement | null>(null);
 
   const parsedRevenue = useMemo(() => parseRevenueInput(annualRevenue), [annualRevenue]);
   const parsedCogs = useMemo(() => parseRevenueInput(annualCogs, { allowZero: true }), [annualCogs]);
@@ -41,29 +40,6 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   const revenuePreview = parsedRevenue ? previewCurrency(parsedRevenue) : null;
   const cogsPreview = parsedCogs ? previewCurrency(parsedCogs) : null;
   const cogsExceedsRevenue = Boolean(parsedRevenue && parsedCogs && parsedCogs > parsedRevenue);
-
-  useEffect(() => {
-    if (!sectorMenuOpen) return;
-
-    const handleClick = (event: MouseEvent) => {
-      const target = event.target as Node | null;
-      if (sectorMenuRef.current && target && !sectorMenuRef.current.contains(target)) {
-        setSectorMenuOpen(false);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSectorMenuOpen(false);
-    };
-
-    document.addEventListener("click", handleClick);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("click", handleClick);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [sectorMenuOpen]);
 
   const validate = () => {
     const nextErrors: Record<string, string> = {};
@@ -204,10 +180,14 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 </button>
               </PopoverTrigger>
               <PopoverContent align="start" className="max-w-sm text-[13px] leading-relaxed">
-                COGS (Cost of Goods Sold) are all costs directly tied to producing or delivering what you sell. This
-                typically includes raw materials, production costs, supplier or purchase costs, and direct labor
-                involved in creating the product or service. It does not include overhead such as marketing, rent,
-                software, or administrative salaries.
+                COGS are the direct costs of producing or delivering what you sell.
+                <br />
+                <br />
+                You can keep this estimate simple (e.g. purchase or material costs) or make it more detailed by
+                including labor, production, or other direct costs.
+                <br />
+                <br />
+                The level of detail depends on the data you have and how precise you want your estimate to be.
               </PopoverContent>
             </Popover>
           </div>
@@ -292,55 +272,41 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               </span>
             )}
           </div>
-          <div ref={sectorMenuRef} className="relative">
-            <button
+          <Select
+            modal={false}
+            value={sector}
+            onValueChange={(value) => {
+              setSector(value as Sector);
+              setTouched((current) => ({ ...current, sector: true }));
+              setErrors((current) => ({ ...current, sector: "" }));
+            }}
+          >
+            <SelectTrigger
               id="sector"
-              type="button"
-              aria-expanded={sectorMenuOpen}
-              aria-haspopup="listbox"
-              onClick={() => setSectorMenuOpen((open) => !open)}
-              className={`touch-target flex h-11 w-full items-center justify-between rounded-lg border bg-background px-4 text-left text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/15 ${
+              aria-invalid={errors.sector && touched.sector ? true : undefined}
+              className={`touch-target h-11 rounded-lg bg-background px-4 text-left text-sm transition-all focus:ring-2 focus:ring-primary/15 focus:ring-offset-0 [&>span]:pr-4 ${
                 errors.sector && touched.sector
-                  ? "border-destructive/40"
+                  ? "border-destructive/40 focus:ring-destructive/15"
                   : "border-border hover:border-muted-foreground/30"
               }`}
             >
-              <span className={sector ? "text-foreground" : "text-muted-foreground/50"}>
-                {selectedSectorLabel ?? "Select your sector"}
-              </span>
-              <ChevronsUpDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
-            </button>
-            {sectorMenuOpen && (
-              <div
-                role="listbox"
-                aria-labelledby="sector"
-                className="absolute z-50 mt-1.5 w-full rounded-lg border border-border bg-card p-1 shadow-card"
-              >
-                <div className="max-h-72 overflow-y-auto">
-                  {SECTOR_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => {
-                        setSector(option.value);
-                        setTouched((current) => ({ ...current, sector: true }));
-                        setErrors((current) => ({ ...current, sector: "" }));
-                        setSectorMenuOpen(false);
-                      }}
-                      className={`flex min-h-10 w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left text-[13px] transition-colors ${
-                        sector === option.value
-                          ? "bg-primary/[0.06] font-medium text-primary"
-                          : "text-foreground hover:bg-muted/60"
-                      }`}
-                    >
-                      <span className="min-w-0">{option.label}</span>
-                      {sector === option.value && <Check className="h-3.5 w-3.5 shrink-0" />}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+              <SelectValue placeholder="Select your sector" />
+            </SelectTrigger>
+            <SelectContent
+              className="max-h-[22rem] w-[min(30rem,var(--radix-select-trigger-width))] rounded-xl border-border bg-card p-1 shadow-card"
+              position="popper"
+            >
+              {SECTOR_OPTIONS.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="min-h-11 rounded-lg py-2.5 pl-8 pr-3 text-[13px] data-[state=checked]:bg-primary/[0.06] data-[state=checked]:font-medium data-[state=checked]:text-primary"
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <p className="text-xs text-muted-foreground">Benchmark ranges are specific to the sector you select.</p>
           {selectedBenchmark && (
             <div className="rounded-lg border border-primary/10 bg-highlight-soft px-3.5 py-2.5">

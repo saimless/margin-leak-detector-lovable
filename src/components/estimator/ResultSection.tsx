@@ -33,6 +33,56 @@ const formatPercentDetailed = (value: number) => `${(value * 100).toFixed(1).rep
 
 const formatGap = (value: number) => `${Math.abs(value * 100).toFixed(1).replace(/\.0$/, "")} pts`;
 
+const resultVisuals: Record<
+  EstimatorResult["performanceState"],
+  {
+    hero: string;
+    benchmark: string;
+    position: string;
+    upside: string;
+    levers: string;
+    interpret: string;
+    summary: [string, string, string, string];
+  }
+> = {
+  below_benchmark_range: {
+    hero: "🧭",
+    benchmark: "📏",
+    position: "🔎",
+    upside: "🌱",
+    levers: "🛠️",
+    interpret: "📘",
+    summary: ["💶", "🏭", "🧾", "📉"],
+  },
+  within_lower_half: {
+    hero: "⚖️",
+    benchmark: "📏",
+    position: "🎯",
+    upside: "🚀",
+    levers: "🛠️",
+    interpret: "📘",
+    summary: ["💶", "📦", "✨", "📈"],
+  },
+  within_upper_half: {
+    hero: "✨",
+    benchmark: "📏",
+    position: "🥇",
+    upside: "🚀",
+    levers: "🛠️",
+    interpret: "📘",
+    summary: ["💶", "⚙️", "💚", "📈"],
+  },
+  above_benchmark_range: {
+    hero: "🏆",
+    benchmark: "📏",
+    position: "🚀",
+    upside: "🌟",
+    levers: "🛠️",
+    interpret: "📘",
+    summary: ["💶", "⚙️", "🏅", "📈"],
+  },
+};
+
 const sectorLeverContext: Record<
   Sector,
   {
@@ -256,6 +306,7 @@ const analysisContent: Record<
 
 export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
   const content = analysisContent[result.performanceState];
+  const visuals = resultVisuals[result.performanceState];
   const AnalysisIcon = content.icon;
   const dynamicLevers = getDynamicLevers(result.sectorKey, result.performanceState);
   const benchmarkPositionValue =
@@ -302,6 +353,9 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                   variant="outline"
                   className="shrink-0 border-primary/20 bg-card text-xs font-medium text-primary"
                 >
+                  <span className="mr-1.5" aria-hidden="true">
+                    {visuals.hero}
+                  </span>
                   {content.badge}
                 </Badge>
               </div>
@@ -311,7 +365,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
             <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
               <div className="rounded-lg border border-border/80 bg-card p-4">
                 <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-                  Sector benchmark range
+                  {visuals.benchmark} Sector benchmark range
                 </p>
                 <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">{result.benchmarkRange}</p>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
@@ -320,7 +374,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               </div>
               <div className="rounded-lg border border-border/80 bg-card p-4">
                 <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-                  Relative position
+                  {visuals.position} Relative position
                 </p>
                 <p className="mt-2 text-xl font-bold text-foreground">{content.performerIndicatorLabel}</p>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
@@ -339,7 +393,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               </div>
               <div className="rounded-lg border border-primary/15 bg-highlight-soft p-4">
                 <p className="text-[10px] font-medium uppercase tracking-widest text-primary">
-                  {result.upsideEstimate.title}
+                  {visuals.upside} {result.upsideEstimate.title}
                 </p>
                 <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">
                   {formatEuro(result.upsideEstimate.additionalRevenueRemaining)}
@@ -355,11 +409,12 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           {/* Summary stats row */}
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {[
-              { label: "Annual revenue", value: formatEuro(result.annualRevenue) },
-              { label: "Annual COGS", value: formatEuro(result.annualCogs) },
+              { label: "Annual revenue", value: formatEuro(result.annualRevenue), icon: visuals.summary[0] },
+              { label: "Annual COGS", value: formatEuro(result.annualCogs), icon: visuals.summary[1] },
               {
                 label: "Revenue after direct costs",
                 value: formatEuro(result.revenueAfterDirectCosts),
+                icon: visuals.summary[2],
               },
               {
                 label: "Benchmark comparison",
@@ -367,11 +422,12 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                   result.benchmarkBandPositionRaw < 0 || result.benchmarkBandPositionRaw > 100
                     ? result.benchmarkBandPositionLabel
                     : `${Math.round(result.benchmarkBandPositionClamped)}% relative position`,
+                icon: visuals.summary[3],
               },
             ].map((item) => (
               <div key={item.label} className="rounded-lg border border-border/60 bg-card p-3.5">
                 <p className="mb-1 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-                  {item.label}
+                  {item.icon} {item.label}
                 </p>
                 <p className="text-sm font-semibold text-foreground">{item.value}</p>
               </div>
