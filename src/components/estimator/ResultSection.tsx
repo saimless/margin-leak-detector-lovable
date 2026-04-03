@@ -264,118 +264,127 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
       : `${Math.round(result.benchmarkBandPositionClamped)}% through benchmark band`;
 
   return (
-    <div className="space-y-4 xs:space-y-5">
+    <div className="space-y-5">
+      {/* Main results card */}
       <div className="card-shell">
-        <div className="card-header-accent" />
-
-        <div className="card-section border-b border-border bg-primary/[0.03] py-6 xs:py-7 sm:py-9">
-          <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-            <div className="h-[2px] w-5 rounded-full bg-primary" />
+        <div className="card-section border-b border-border/60 py-7 sm:py-9">
+          <p className="mb-4 text-xs font-medium uppercase tracking-widest text-primary">
             Analysis Results
-          </div>
-          <h2 className="font-display mb-3 text-2xl font-800 leading-tight tracking-tight text-foreground sm:text-3xl">
-            Percentage of revenue remaining after direct product costs
+          </p>
+          <h2 className="font-display text-xl font-bold leading-tight tracking-tight text-foreground sm:text-2xl">
+            Revenue remaining after direct product costs
           </h2>
-          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            This shows how much revenue remains after covering the direct costs of what you sell, before accounting for
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            How much revenue remains after covering the direct costs of what you sell, before accounting for
             operating expenses like marketing, salaries, or overhead.
           </p>
         </div>
 
-        <div className="card-section space-y-5 py-5 xs:space-y-6 xs:py-6 sm:py-8">
-          <div className="grid gap-3 xl:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-2xl border border-primary/20 bg-primary/[0.05] px-5 py-5 shadow-sm">
+        <div className="card-section space-y-6 py-6 sm:py-8">
+          {/* Primary metric + side panels */}
+          <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+            {/* Primary metric */}
+            <div className="rounded-lg border border-primary/15 bg-highlight-soft p-6">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
+                  <p className="text-xs font-medium uppercase tracking-widest text-primary">
                     Your calculated percentage
                   </p>
-                  <p className="mt-2 text-4xl font-bold tracking-tight text-foreground tabular-nums">
+                  <p className="mt-3 text-5xl font-extrabold tracking-tight text-foreground tabular-nums sm:text-6xl">
                     {formatPercent(result.percentageRemaining)}
                   </p>
-                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                    Revenue remaining after direct product costs: {formatEuro(result.revenueAfterDirectCosts)} from{" "}
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Revenue remaining: {formatEuro(result.revenueAfterDirectCosts)} from{" "}
                     {formatEuro(result.annualRevenue)} annual revenue.
                   </p>
                 </div>
-                <Badge className="border border-primary/20 bg-background/80 text-primary hover:bg-background/80">
+                <Badge
+                  variant="outline"
+                  className="shrink-0 border-primary/20 bg-card text-xs font-medium text-primary"
+                >
                   {content.badge}
                 </Badge>
               </div>
             </div>
 
+            {/* Side metrics */}
             <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
-              <div className="rounded-xl border border-border bg-surface px-4 py-4">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <div className="rounded-lg border border-border/80 bg-card p-4">
+                <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
                   Sector benchmark range
                 </p>
                 <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">{result.benchmarkRange}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Sector anchor: {result.benchmarkAnchor}. Stronger sector performance sits closer to the upper end of
-                  this band.
+                <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
+                  Anchor: {result.benchmarkAnchor}
                 </p>
               </div>
-              <div className="rounded-xl border border-border bg-surface px-4 py-4">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Relative position vs sector benchmark
+              <div className="rounded-lg border border-border/80 bg-card p-4">
+                <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+                  Relative position
                 </p>
                 <p className="mt-2 text-xl font-bold text-foreground">{content.performerIndicatorLabel}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {result.benchmarkBandPositionLabel}. {benchmarkPositionValue}.
+                <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
+                  {result.benchmarkBandPositionLabel}
                 </p>
-                {result.benchmarkBandPositionRaw >= 0 && result.benchmarkBandPositionRaw <= 100 ? (
+                {result.benchmarkBandPositionRaw >= 0 && result.benchmarkBandPositionRaw <= 100 && (
                   <div className="mt-3">
-                    <div className="h-2 overflow-hidden rounded-full bg-border">
+                    <div className="h-1.5 overflow-hidden rounded-full bg-border">
                       <div
-                        className="h-full rounded-full bg-primary transition-all"
+                        className="h-full rounded-full bg-primary transition-all duration-500"
                         style={{ width: `${result.benchmarkBandPositionClamped}%` }}
                       />
                     </div>
                   </div>
-                ) : null}
+                )}
               </div>
-              <div className="rounded-xl border border-primary/15 bg-primary/[0.04] px-4 py-4">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+              <div className="rounded-lg border border-primary/15 bg-highlight-soft p-4">
+                <p className="text-[10px] font-medium uppercase tracking-widest text-primary">
                   {result.upsideEstimate.title}
                 </p>
-                <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">{formatEuro(result.upsideEstimate.additionalRevenueRemaining)}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Estimated additional revenue remaining if performance moves toward the{" "}
-                  {result.upsideEstimate.targetLabel} at {formatPercent(result.upsideEstimate.targetPercentage)}.
+                <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">
+                  {formatEuro(result.upsideEstimate.additionalRevenueRemaining)}
+                </p>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
+                  If performance moves toward {result.upsideEstimate.targetLabel} at{" "}
+                  {formatPercent(result.upsideEstimate.targetPercentage)}.
                 </p>
               </div>
             </div>
           </div>
 
+          {/* Summary stats row */}
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {[
               { label: "Annual revenue", value: formatEuro(result.annualRevenue) },
               { label: "Annual COGS", value: formatEuro(result.annualCogs) },
               {
-                label: "Revenue remaining after direct product costs",
+                label: "Revenue after direct costs",
                 value: formatEuro(result.revenueAfterDirectCosts),
               },
               {
-                label: "Comparison vs benchmark",
+                label: "Benchmark comparison",
                 value:
                   result.benchmarkBandPositionRaw < 0 || result.benchmarkBandPositionRaw > 100
                     ? result.benchmarkBandPositionLabel
-                    : `${Math.round(result.benchmarkBandPositionClamped)}% relative benchmark position`,
+                    : `${Math.round(result.benchmarkBandPositionClamped)}% relative position`,
               },
             ].map((item) => (
-              <div key={item.label} className="rounded-xl border border-border bg-surface px-4 py-3">
-                <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{item.label}</p>
+              <div key={item.label} className="rounded-lg border border-border/60 bg-card p-3.5">
+                <p className="mb-1 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+                  {item.label}
+                </p>
                 <p className="text-sm font-semibold text-foreground">{item.value}</p>
               </div>
             ))}
           </div>
 
-          <div className="rounded-xl border border-border bg-surface px-4 py-4 xs:px-5 xs:py-5">
-            <div className="mb-3 flex items-center gap-2">
+          {/* Analysis narrative */}
+          <div className="rounded-lg border border-border/60 bg-card p-5">
+            <div className="mb-3 flex items-center gap-2.5">
               <AnalysisIcon className={`h-4 w-4 ${content.iconClassName}`} />
               <p className="text-sm font-semibold text-foreground">{content.headline}</p>
             </div>
-            <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+            <div className="space-y-3 text-[13px] leading-relaxed text-muted-foreground">
               <p>
                 We calculated annual revenue minus annual COGS, then expressed the remainder as a percentage of annual
                 revenue. Your result is {formatPercentDetailed(result.percentageRemaining)} versus a sector benchmark
@@ -389,33 +398,33 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
             </div>
           </div>
 
-          <div className="grid gap-3 xl:grid-cols-[1fr_0.95fr]">
-            <div className="rounded-xl border border-border bg-surface px-4 py-4 xs:px-5 xs:py-5">
-              <div className="mb-3 flex items-center gap-2">
+          {/* Levers + interpretation */}
+          <div className="grid gap-4 xl:grid-cols-[1fr_0.95fr]">
+            <div className="rounded-lg border border-border/60 bg-card p-5">
+              <div className="mb-3 flex items-center gap-2.5">
                 <Sparkles className="h-4 w-4 text-primary" />
                 <p className="text-sm font-semibold text-foreground">Where you can improve (and how we help)</p>
               </div>
               <div className="grid gap-2">
                 {dynamicLevers.map((lever) => (
-                  <div key={lever} className="rounded-lg border border-border/70 bg-background px-3 py-2.5 text-sm leading-relaxed text-muted-foreground">
+                  <div
+                    key={lever}
+                    className="rounded-md border border-border/50 bg-muted/30 px-3.5 py-2.5 text-[13px] leading-relaxed text-muted-foreground"
+                  >
                     {lever}
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-xl border border-border bg-surface px-4 py-4 xs:px-5 xs:py-5">
-              <div className="mb-3 flex items-center gap-2">
+            <div className="rounded-lg border border-border/60 bg-card p-5">
+              <div className="mb-3 flex items-center gap-2.5">
                 <Gauge className="h-4 w-4 text-primary" />
                 <p className="text-sm font-semibold text-foreground">How to interpret this result</p>
               </div>
-              <div className="space-y-2.5 text-sm leading-relaxed text-muted-foreground">
-                <p>
-                  This shows the share of revenue left after direct product costs (COGS).
-                </p>
-                <p>
-                  This is often called gross margin, but we explain it here in a simpler way.
-                </p>
+              <div className="space-y-2.5 text-[13px] leading-relaxed text-muted-foreground">
+                <p>This shows the share of revenue left after direct product costs (COGS).</p>
+                <p>This is often called gross margin, but we explain it here in a simpler way.</p>
                 <p>
                   COGS are the direct costs of making or delivering what you sell, like materials, production,
                   supplier costs, and direct labor.
@@ -432,12 +441,13 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-primary/15 bg-primary/[0.04] px-4 py-4 xs:px-5 xs:py-5">
+          {/* Upside callout */}
+          <div className="rounded-lg border border-primary/10 bg-highlight-soft p-5">
             <div className="flex items-start gap-3">
               <MoveRight className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <div className="min-w-0 space-y-2">
+              <div className="min-w-0 space-y-1.5">
                 <p className="text-sm font-semibold text-foreground">Estimated upside</p>
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-[13px] leading-relaxed text-muted-foreground">
                   {result.upsideEstimate.summary} At your current revenue level, that translates to about{" "}
                   {formatEuro(result.upsideEstimate.additionalRevenueRemaining)} of additional revenue remaining after
                   direct product costs.
@@ -448,15 +458,14 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
         </div>
       </div>
 
+      {/* CTA card */}
       <div className="card-shell">
-        <div className="card-header-accent" />
-        <div className="card-section py-6 xs:py-7 sm:py-9">
+        <div className="card-section py-8 sm:py-10">
           <div className="space-y-5 text-center">
-            <div className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-              <div className="h-[2px] w-5 rounded-full bg-primary" />
+            <p className="text-xs font-medium uppercase tracking-widest text-primary">
               Next Step
-            </div>
-            <h3 className="font-display text-lg font-700 text-foreground sm:text-xl">
+            </p>
+            <h3 className="font-display text-lg font-bold text-foreground sm:text-xl">
               Want a deeper revenue and direct-cost analysis?
             </h3>
             <p className="mx-auto max-w-lg text-sm leading-relaxed text-muted-foreground">
@@ -467,18 +476,18 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               <Button
                 asChild
                 size="lg"
-                className="group h-12 w-full rounded-xl bg-primary px-6 text-base font-semibold text-primary-foreground shadow-elevated transition-all duration-300 hover:bg-primary/90 hover:shadow-highlight sm:w-auto sm:px-8"
+                className="group h-11 w-full rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 sm:h-12 sm:w-auto sm:px-8 sm:text-[15px]"
               >
                 <a href="https://www.saimless.com" target="_blank" rel="noreferrer">
                   Get a deeper analysis
-                  <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </a>
               </Button>
               <Button
                 onClick={onReset}
                 variant="ghost"
                 size="lg"
-                className="h-12 w-full text-sm text-muted-foreground hover:text-foreground sm:w-auto"
+                className="h-11 w-full text-sm text-muted-foreground transition-colors hover:text-foreground sm:h-12 sm:w-auto"
               >
                 <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
                 Try another scenario

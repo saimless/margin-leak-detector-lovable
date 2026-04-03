@@ -43,9 +43,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   const cogsExceedsRevenue = Boolean(parsedRevenue && parsedCogs && parsedCogs > parsedRevenue);
 
   useEffect(() => {
-    if (!sectorMenuOpen) {
-      return;
-    }
+    if (!sectorMenuOpen) return;
 
     const handleClick = (event: MouseEvent) => {
       const target = event.target as Node | null;
@@ -55,9 +53,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
     };
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setSectorMenuOpen(false);
-      }
+      if (event.key === "Escape") setSectorMenuOpen(false);
     };
 
     document.addEventListener("click", handleClick);
@@ -103,39 +99,38 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
 
   return (
     <div className="card-shell">
-      <div className="card-header-accent" />
-      <div className="card-section pb-4 pt-6 xs:pt-7 sm:pt-9">
-        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-          <div className="h-[2px] w-5 rounded-full bg-primary" />
-          Revenue After Direct Costs Calculator
-        </div>
-        <h2 className="font-display mb-1.5 text-xl font-700 text-foreground sm:text-2xl">
-          Percentage of revenue remaining after direct product costs
+      <div className="card-section pb-0 pt-7 sm:pt-9">
+        <p className="mb-4 text-xs font-medium uppercase tracking-widest text-primary">
+          Revenue Calculator
+        </p>
+        <h2 className="font-display text-xl font-bold text-foreground sm:text-2xl">
+          Revenue remaining after direct product costs
         </h2>
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          We calculate how much of your annual revenue remains after subtracting the direct costs of delivering your
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          Calculate how much of your annual revenue remains after subtracting the direct costs of delivering your
           product or service.
         </p>
       </div>
 
-      <div className="card-section pb-2">
-        <div className="h-px bg-border" />
+      <div className="card-section py-4">
+        <div className="h-px bg-border/60" />
       </div>
 
-      <form onSubmit={handleSubmit} className="card-section space-y-6 py-5 xs:space-y-7 xs:py-6 sm:py-8">
-        <div className="rounded-xl border border-primary/15 bg-primary/[0.04] px-4 py-4">
-          <p className="text-sm font-semibold text-foreground">What this calculates</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+      <form onSubmit={handleSubmit} className="card-section space-y-7 pb-8 pt-0 sm:space-y-8">
+        <div className="rounded-lg border border-primary/10 bg-highlight-soft px-4 py-3.5">
+          <p className="text-[13px] font-medium text-foreground">What this calculates</p>
+          <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
             Annual revenue minus direct product-related costs (COGS), expressed as a percentage of annual revenue.
           </p>
         </div>
 
-        <div className="space-y-2.5">
-          <Label htmlFor="revenue" className="text-sm font-semibold text-foreground">
+        {/* Step 1: Revenue */}
+        <div className="space-y-2">
+          <Label htmlFor="revenue" className="text-[13px] font-semibold text-foreground">
             Step 1: Expected annual revenue
           </Label>
           <div className="relative">
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground">€</div>
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">€</div>
             <Input
               id="revenue"
               type="text"
@@ -171,43 +166,44 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 }));
               }}
               placeholder="e.g. 12.500.000 or 12.5M"
-              className={`touch-target h-12 rounded-xl border-border bg-surface pl-8 text-base transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 ${
-                errors.revenue && touched.revenue ? "border-destructive ring-destructive/10" : ""
+              className={`touch-target h-11 rounded-lg border-border bg-background pl-9 text-sm transition-all placeholder:text-muted-foreground/50 focus:border-primary focus:ring-2 focus:ring-primary/15 ${
+                errors.revenue && touched.revenue ? "border-destructive focus:ring-destructive/15" : ""
               }`}
             />
           </div>
-          <div className="flex flex-col gap-2 xs:flex-row xs:items-center xs:justify-between">
+          <div className="flex flex-col gap-1.5 xs:flex-row xs:items-center xs:justify-between">
             <p className="text-xs text-muted-foreground">Your estimated total revenue over a full year.</p>
-            {revenuePreview ? (
-              <p className="w-fit rounded-md border border-primary/10 bg-highlight-soft px-2.5 py-1 text-xs font-semibold text-primary">
+            {revenuePreview && (
+              <span className="w-fit rounded-md bg-highlight-soft px-2 py-0.5 text-xs font-medium text-primary">
                 ≈ {revenuePreview}
-              </p>
-            ) : null}
+              </span>
+            )}
           </div>
-          {errors.revenue && touched.revenue ? (
+          {errors.revenue && touched.revenue && (
             <p className="flex items-center gap-1.5 text-xs text-destructive">
               <Info className="h-3 w-3 shrink-0" />
               {errors.revenue}
             </p>
-          ) : null}
+          )}
         </div>
 
-        <div className="space-y-2.5">
+        {/* Step 2: COGS */}
+        <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Label htmlFor="cogs" className="text-sm font-semibold text-foreground">
+            <Label htmlFor="cogs" className="text-[13px] font-semibold text-foreground">
               Step 2: Estimated annual COGS
             </Label>
             <Popover>
               <PopoverTrigger asChild>
                 <button
                   type="button"
-                  className="touch-target inline-flex min-w-11 items-center justify-center text-muted-foreground transition-colors hover:text-primary"
+                  className="touch-target inline-flex min-w-11 items-center justify-center text-muted-foreground/60 transition-colors hover:text-primary"
                   aria-label="COGS explanation"
                 >
                   <Info className="h-3.5 w-3.5" />
                 </button>
               </PopoverTrigger>
-              <PopoverContent align="start" className="max-w-sm text-sm leading-relaxed">
+              <PopoverContent align="start" className="max-w-sm text-[13px] leading-relaxed">
                 COGS (Cost of Goods Sold) are all costs directly tied to producing or delivering what you sell. This
                 typically includes raw materials, production costs, supplier or purchase costs, and direct labor
                 involved in creating the product or service. It does not include overhead such as marketing, rent,
@@ -216,7 +212,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
             </Popover>
           </div>
           <div className="relative">
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground">€</div>
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">€</div>
             <Input
               id="cogs"
               type="text"
@@ -255,46 +251,46 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 }));
               }}
               placeholder="e.g. 7.200.000 or 7.2M"
-              className={`touch-target h-12 rounded-xl border-border bg-surface pl-8 text-base transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 ${
-                errors.cogs && touched.cogs ? "border-destructive ring-destructive/10" : ""
+              className={`touch-target h-11 rounded-lg border-border bg-background pl-9 text-sm transition-all placeholder:text-muted-foreground/50 focus:border-primary focus:ring-2 focus:ring-primary/15 ${
+                errors.cogs && touched.cogs ? "border-destructive focus:ring-destructive/15" : ""
               }`}
             />
           </div>
-          <div className="flex flex-col gap-2 xs:flex-row xs:items-center xs:justify-between">
+          <div className="flex flex-col gap-1.5 xs:flex-row xs:items-center xs:justify-between">
             <p className="text-xs text-muted-foreground">
-              These are the costs directly tied to delivering your product or service (e.g. materials, production,
-              supplier costs). Do not include general business expenses like marketing or rent.
+              Direct costs of delivering your product or service (materials, production, suppliers). Exclude marketing, rent, overhead.
             </p>
-            {cogsPreview ? (
-              <p className="w-fit rounded-md border border-primary/10 bg-highlight-soft px-2.5 py-1 text-xs font-semibold text-primary">
+            {cogsPreview && (
+              <span className="w-fit rounded-md bg-highlight-soft px-2 py-0.5 text-xs font-medium text-primary">
                 ≈ {cogsPreview}
-              </p>
-            ) : null}
+              </span>
+            )}
           </div>
-          {errors.cogs && touched.cogs ? (
+          {errors.cogs && touched.cogs && (
             <p className="flex items-center gap-1.5 text-xs text-destructive">
               <Info className="h-3 w-3 shrink-0" />
               {errors.cogs}
             </p>
-          ) : null}
-          {cogsExceedsRevenue && !errors.cogs ? (
+          )}
+          {cogsExceedsRevenue && !errors.cogs && (
             <p className="flex items-center gap-1.5 text-xs text-destructive">
               <Info className="h-3 w-3 shrink-0" />
               Annual COGS cannot be higher than annual revenue for this calculation.
             </p>
-          ) : null}
+          )}
         </div>
 
-        <div className="space-y-2.5">
-          <div className="flex flex-col gap-2 xs:flex-row xs:items-center xs:justify-between">
-            <Label htmlFor="sector" className="text-sm font-semibold text-foreground">
+        {/* Step 3: Sector */}
+        <div className="space-y-2">
+          <div className="flex flex-col gap-1.5 xs:flex-row xs:items-center xs:justify-between">
+            <Label htmlFor="sector" className="text-[13px] font-semibold text-foreground">
               Step 3: Sector
             </Label>
-            {selectedSectorLabel ? (
-              <p className="w-fit rounded-md border border-primary/10 bg-highlight-soft px-2.5 py-1 text-xs font-semibold text-primary">
+            {selectedSectorLabel && (
+              <span className="w-fit rounded-md bg-highlight-soft px-2 py-0.5 text-xs font-medium text-primary">
                 {selectedSectorLabel}
-              </p>
-            ) : null}
+              </span>
+            )}
           </div>
           <div ref={sectorMenuRef} className="relative">
             <button
@@ -303,24 +299,24 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               aria-expanded={sectorMenuOpen}
               aria-haspopup="listbox"
               onClick={() => setSectorMenuOpen((open) => !open)}
-              className={`touch-target flex h-12 w-full items-center justify-between rounded-xl border bg-surface px-4 text-left text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+              className={`touch-target flex h-11 w-full items-center justify-between rounded-lg border bg-background px-4 text-left text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/15 ${
                 errors.sector && touched.sector
-                  ? "border-destructive/40 ring-1 ring-destructive/10"
-                  : "border-border hover:border-primary/40"
+                  ? "border-destructive/40"
+                  : "border-border hover:border-muted-foreground/30"
               }`}
             >
-              <span className={sector ? "text-foreground" : "text-muted-foreground"}>
+              <span className={sector ? "text-foreground" : "text-muted-foreground/50"}>
                 {selectedSectorLabel ?? "Select your sector"}
               </span>
-              <ChevronsUpDown className="h-4 w-4 shrink-0 text-muted-foreground/80" />
+              <ChevronsUpDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
             </button>
-            {sectorMenuOpen ? (
+            {sectorMenuOpen && (
               <div
                 role="listbox"
                 aria-labelledby="sector"
-                className="mt-2 rounded-xl border border-border bg-card p-1 shadow-premium"
+                className="absolute z-50 mt-1.5 w-full rounded-lg border border-border bg-card p-1 shadow-card"
               >
-                <div className="max-h-72 overflow-y-auto pr-1">
+                <div className="max-h-72 overflow-y-auto">
                   {SECTOR_OPTIONS.map((option) => (
                     <button
                       key={option.value}
@@ -331,50 +327,50 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                         setErrors((current) => ({ ...current, sector: "" }));
                         setSectorMenuOpen(false);
                       }}
-                      className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                      className={`flex min-h-10 w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left text-[13px] transition-colors ${
                         sector === option.value
-                          ? "bg-primary/[0.08] text-primary"
-                          : "text-foreground hover:bg-primary/[0.04]"
+                          ? "bg-primary/[0.06] font-medium text-primary"
+                          : "text-foreground hover:bg-muted/60"
                       }`}
                     >
                       <span className="min-w-0">{option.label}</span>
-                      {sector === option.value ? <Check className="h-4 w-4 shrink-0" /> : null}
+                      {sector === option.value && <Check className="h-3.5 w-3.5 shrink-0" />}
                     </button>
                   ))}
                 </div>
               </div>
-            ) : null}
+            )}
           </div>
-          <p className="text-xs text-muted-foreground">Benchmark ranges remain specific to the sector you select.</p>
-          {selectedBenchmark ? (
-            <div className="rounded-lg border border-primary/15 bg-primary/5 px-3.5 py-2.5">
+          <p className="text-xs text-muted-foreground">Benchmark ranges are specific to the sector you select.</p>
+          {selectedBenchmark && (
+            <div className="rounded-lg border border-primary/10 bg-highlight-soft px-3.5 py-2.5">
               <p className="text-xs leading-relaxed text-muted-foreground">
-                <span className="font-semibold text-primary">Benchmark:</span> Anchor at{" "}
+                <span className="font-medium text-primary">Benchmark:</span> Anchor at{" "}
                 {formatBenchmarkAnchor(selectedBenchmark.anchor)}. Typical range{" "}
                 {formatBenchmarkRange(selectedBenchmark.bandLow, selectedBenchmark.bandHigh)}.
               </p>
             </div>
-          ) : null}
-          {errors.sector && touched.sector ? (
+          )}
+          {errors.sector && touched.sector && (
             <p className="flex items-center gap-1.5 text-xs text-destructive">
               <Info className="h-3 w-3 shrink-0" />
               {errors.sector}
             </p>
-          ) : null}
+          )}
         </div>
 
-        <div className="pt-1">
+        <div className="pt-2">
           <Button
             type="submit"
             size="lg"
-            className="group min-h-12 h-auto w-full rounded-xl bg-primary px-5 py-3 text-center text-[0.95rem] font-semibold leading-snug text-primary-foreground whitespace-normal shadow-elevated transition-all duration-300 hover:bg-primary/90 hover:shadow-highlight sm:h-13 sm:px-6 sm:text-base sm:whitespace-nowrap"
+            className="group h-11 w-full rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 sm:h-12 sm:text-[15px]"
           >
-            <span className="min-w-0">Calculate revenue remaining after direct product costs</span>
-            <ArrowRight className="hidden h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 xs:block" />
+            <span className="min-w-0">Calculate revenue remaining after direct costs</span>
+            <ArrowRight className="ml-2 hidden h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 xs:block" />
           </Button>
         </div>
 
-        <p className="text-center text-[11px] leading-relaxed text-muted-foreground">
+        <p className="text-center text-[11px] text-muted-foreground/70">
           Benchmark-based estimate · No data is stored · This is not net profit
         </p>
       </form>

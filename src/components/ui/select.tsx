@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const Select = ({
   ...props
 }: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>) => (
-  <SelectPrimitive.Root {...props} modal={false} />
+  <SelectPrimitive.Root {...props} />
 );
 
 const SelectGroup = SelectPrimitive.Group;
