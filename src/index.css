@@ -138,7 +138,7 @@
   }
 
   .card-section {
-    @apply px-5 xs:px-6 sm:px-8 lg:px-10;
+    @apply px-6 xs:px-7 sm:px-9 lg:px-11;
   }
 }
 
