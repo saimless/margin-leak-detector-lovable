@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { formatRevenueDisplayInput, parseRevenueInput } from "@/lib/revenue";
 import {
   SECTOR_OPTIONS,
@@ -30,6 +30,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   const [annualRevenue, setAnnualRevenue] = useState("");
   const [annualCogs, setAnnualCogs] = useState("");
   const [sector, setSector] = useState<Sector | "">("");
+  const [isSectorMenuOpen, setIsSectorMenuOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
@@ -272,41 +273,67 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               </span>
             )}
           </div>
-          <Select
-            modal={false}
-            value={sector}
-            onValueChange={(value) => {
-              setSector(value as Sector);
-              setTouched((current) => ({ ...current, sector: true }));
-              setErrors((current) => ({ ...current, sector: "" }));
-            }}
-          >
-            <SelectTrigger
-              id="sector"
-              aria-invalid={errors.sector && touched.sector ? true : undefined}
-              className={`touch-target h-11 rounded-lg bg-background px-4 text-left text-sm transition-all focus:ring-2 focus:ring-primary/15 focus:ring-offset-0 [&>span]:pr-4 ${
-                errors.sector && touched.sector
-                  ? "border-destructive/40 focus:ring-destructive/15"
-                  : "border-border hover:border-muted-foreground/30"
-              }`}
+          <Popover modal={false} open={isSectorMenuOpen} onOpenChange={setIsSectorMenuOpen}>
+            <PopoverTrigger asChild>
+              <button
+                id="sector"
+                type="button"
+                aria-invalid={errors.sector && touched.sector ? true : undefined}
+                aria-expanded={isSectorMenuOpen}
+                aria-haspopup="listbox"
+                className={cn(
+                  "touch-target flex h-11 w-full items-center justify-between rounded-lg border bg-background px-4 text-left text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/15 focus:ring-offset-0",
+                  errors.sector && touched.sector
+                    ? "border-destructive/40 focus:ring-destructive/15"
+                    : "border-border hover:border-muted-foreground/30",
+                )}
+              >
+                <span className={cn("truncate pr-4", sector ? "text-foreground" : "text-muted-foreground")}>
+                  {selectedSectorLabel ?? "Select your sector"}
+                </span>
+                <ChevronDown
+                  className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform", isSectorMenuOpen && "rotate-180")}
+                />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="start"
+              side="bottom"
+              sideOffset={8}
+              avoidCollisions={false}
+              className="max-h-[22rem] w-[min(30rem,var(--radix-popover-trigger-width))] overflow-y-auto rounded-xl border-border bg-card p-1 shadow-card"
             >
-              <SelectValue placeholder="Select your sector" />
-            </SelectTrigger>
-            <SelectContent
-              className="max-h-[22rem] w-[min(30rem,var(--radix-select-trigger-width))] rounded-xl border-border bg-card p-1 shadow-card"
-              position="popper"
-            >
-              {SECTOR_OPTIONS.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="min-h-11 rounded-lg py-2.5 pl-8 pr-3 text-[13px] data-[state=checked]:bg-primary/[0.06] data-[state=checked]:font-medium data-[state=checked]:text-primary"
-                >
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              <div role="listbox" aria-labelledby="sector" className="space-y-1">
+                {SECTOR_OPTIONS.map((option) => {
+                  const isSelected = option.value === sector;
+
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="option"
+                      aria-selected={isSelected}
+                      className={cn(
+                        "flex min-h-11 w-full items-center gap-3 rounded-lg py-2.5 pl-3 pr-3 text-left text-[13px] transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/15",
+                        isSelected && "bg-primary/[0.06] font-medium text-primary",
+                      )}
+                      onClick={() => {
+                        setSector(option.value);
+                        setTouched((current) => ({ ...current, sector: true }));
+                        setErrors((current) => ({ ...current, sector: "" }));
+                        setIsSectorMenuOpen(false);
+                      }}
+                    >
+                      <span className="flex h-4 w-4 items-center justify-center">
+                        {isSelected ? <Check className="h-4 w-4" /> : null}
+                      </span>
+                      <span>{option.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </PopoverContent>
+          </Popover>
           <p className="text-xs text-muted-foreground">Benchmark ranges are specific to the sector you select.</p>
           {selectedBenchmark && (
             <div className="rounded-lg border border-primary/10 bg-highlight-soft px-3.5 py-2.5">

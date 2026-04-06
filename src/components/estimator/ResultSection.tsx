@@ -522,11 +522,11 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               Next Step
             </p>
             <h3 className="font-display text-lg font-bold text-foreground sm:text-xl">
-              Want a deeper revenue and direct-cost analysis?
+              Ready to move beyond static estimates?
             </h3>
             <p className="mx-auto max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Explore which products, services, deals, or customer segments are diluting retained revenue and where
-              sharper pricing or cost decisions could create the most value.
+              Our platform connects predicted sales volumes with your cost data to show how expected demand impacts
+              your margins, helping you make more precise pricing, cost, and planning decisions.
             </p>
             <div className="flex flex-col items-center justify-center gap-3 pt-1 sm:flex-row">
               <Button
