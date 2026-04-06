@@ -22,11 +22,12 @@ export const Footer = () => {
           </a>
           <div className="max-w-xl space-y-2">
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Seamless AI integration for smarter decisions. We turn historical sales and pricing data into forward-looking margin insights.
+              SAImless helps you understand how margins change by connecting predicted sales volumes with your cost
+              data and turning them into clear, practical business insights.
             </p>
             <p className="text-xs leading-relaxed text-muted-foreground/70">
-              This tool provides directional estimates based on benchmark data. Actual results depend on your business
-              model, execution, and market conditions.
+              This tool provides directional estimates based on benchmark data. The wider platform uses advanced
+              modeling and company data to support deeper pricing, cost, and planning decisions.
             </p>
             <p className="text-[11px] text-muted-foreground/40 pt-1">
               © {new Date().getFullYear()} SAImless. All rights reserved.

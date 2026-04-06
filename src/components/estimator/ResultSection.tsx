@@ -220,7 +220,7 @@ const analysisContent: Record<
 > = {
   below_benchmark_range: {
     badge: "Below benchmark range",
-    headline: "Your retained revenue percentage is below the sector benchmark range.",
+    headline: "You are keeping less revenue after direct costs than the typical range in your sector.",
     benchmarkSummary:
       "Compared with similar companies, less of your revenue stays after direct product costs.",
     practicalMeaning:
@@ -242,7 +242,7 @@ const analysisContent: Record<
   },
   within_lower_half: {
     badge: "Within benchmark, lower half",
-    headline: "You are inside the benchmark range, but closer to the lower end than the stronger performers in your sector.",
+    headline: "You are within the benchmark range, but closer to the lower end of the sector range.",
     benchmarkSummary:
       "Your result is in range, but stronger companies in your sector keep more revenue after direct product costs.",
     practicalMeaning:
@@ -264,7 +264,7 @@ const analysisContent: Record<
   },
   within_upper_half: {
     badge: "Within benchmark, upper half",
-    headline: "You are performing in the stronger half of the benchmark band.",
+    headline: "You are in the stronger half of the benchmark range.",
     benchmarkSummary:
       "A healthy share of your revenue stays after direct product costs, and you are closer to stronger sector performance.",
     practicalMeaning:
@@ -286,7 +286,7 @@ const analysisContent: Record<
   },
   above_benchmark_range: {
     badge: "Above benchmark range",
-    headline: "You are outperforming the sector benchmark range.",
+    headline: "You are keeping more revenue after direct costs than the typical range in your sector.",
     benchmarkSummary:
       "More of your revenue stays after direct product costs than is typical in your sector.",
     practicalMeaning:
@@ -331,8 +331,8 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
             Revenue remaining after direct product costs
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            How much revenue remains after covering the direct costs of what you sell, before accounting for
-            operating expenses like marketing, salaries, or overhead.
+            This shows how much revenue is left after the direct costs of what you sell, before operating costs like
+            marketing, salaries, rent, or overhead.
           </p>
         </div>
 
@@ -350,8 +350,8 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                     {formatPercent(result.percentageRemaining)}
                   </p>
                   <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                    Revenue remaining: {formatEuro(result.revenueAfterDirectCosts)} from{" "}
-                    {formatEuro(result.annualRevenue)} annual revenue.
+                    You keep {formatEuro(result.revenueAfterDirectCosts)} from{" "}
+                    {formatEuro(result.annualRevenue)} in annual revenue after direct costs.
                   </p>
                 </div>
                 <Badge
@@ -404,7 +404,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                   {formatEuro(result.upsideEstimate.additionalRevenueRemaining)}
                 </p>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
-                  If performance moves toward {result.upsideEstimate.targetLabel} at{" "}
+                  If your result moves toward {result.upsideEstimate.targetLabel} at{" "}
                   {formatPercent(result.upsideEstimate.targetPercentage)}.
                 </p>
               </div>
@@ -447,9 +447,9 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
             </div>
             <div className="space-y-3.5 text-[13px] leading-relaxed text-muted-foreground">
               <p>
-                We calculated annual revenue minus annual COGS, then expressed the remainder as a percentage of annual
-                revenue. Your result is {formatPercentDetailed(result.percentageRemaining)} versus a sector benchmark
-                range of {result.benchmarkRange}.
+                We calculated annual revenue minus annual COGS, then showed the remainder as a percentage of annual
+                revenue. Your result is {formatPercentDetailed(result.percentageRemaining)}. The typical sector range
+                is {result.benchmarkRange}.
               </p>
               <p>{content.benchmarkSummary}</p>
               <p>{content.practicalMeaning}</p>
@@ -486,17 +486,17 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               </div>
               <div className="space-y-3 text-[13px] leading-relaxed text-muted-foreground">
                 <p>This shows the share of revenue left after direct product costs (COGS).</p>
-                <p>This is often called gross margin, but we explain it here in a simpler way.</p>
+                <p>This is often called gross margin, but here we show it in a simpler business view.</p>
                 <p>
                   COGS are the direct costs of making or delivering what you sell, like materials, production,
                   supplier costs, and direct labor.
                 </p>
                 <p>
-                  It does not include costs like marketing, salaries, rent, or overhead. Net margin includes all
-                  costs, but this metric only looks at direct cost efficiency.
+                  It does not include costs like marketing, salaries, rent, or overhead. Net margin includes those
+                  costs too, but this result focuses only on direct cost performance.
                 </p>
                 <p>
-                  This is not an exact finance report. It is a benchmark-based estimate that shows how your business
+                  This is a directional estimate, not a full finance report. It helps you see how your business
                   compares with similar companies in your sector.
                 </p>
               </div>
@@ -513,8 +513,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                 <p className="text-sm font-bold text-foreground">📈 Estimated upside</p>
                 <p className="text-[13px] leading-relaxed text-muted-foreground">
                   {result.upsideEstimate.summary} At your current revenue level, that translates to about{" "}
-                  {formatEuro(result.upsideEstimate.additionalRevenueRemaining)} of additional revenue remaining after
-                  direct product costs.
+                  {formatEuro(result.upsideEstimate.additionalRevenueRemaining)} more revenue kept after direct costs.
                 </p>
               </div>
             </div>
@@ -537,11 +536,13 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                 </div>
 
                 <h3 className="font-display text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-[1.75rem]">
-                  Turn margin estimates into actionable, AI-driven insights
+                  See how expected demand can change your margins
                 </h3>
 
                 <p className="mx-auto max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-                  This calculator shows where you stand. SAImless shows you <span className="font-semibold text-foreground">why</span> — by connecting predicted sales volumes with your cost data to deliver company-specific margin intelligence.
+                  This calculator shows where you stand today. Our platform connects predicted sales volumes with your
+                  cost data to show how margins can change, so you can make better pricing, cost, and planning
+                  decisions.
                 </p>
               </div>
 
@@ -551,27 +552,27 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                   <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                     <BarChart3 className="h-4.5 w-4.5 text-primary" />
                   </div>
-                  <p className="text-[13px] font-bold text-foreground">Predictive analysis</p>
+                  <p className="text-[13px] font-bold text-foreground">Modeled projections</p>
                   <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                    From historical patterns to forward-looking margin forecasts
+                    See how predicted sales volumes and costs can affect future margins.
                   </p>
                 </div>
                 <div className="rounded-xl border border-border/50 bg-card p-5 text-left transition-shadow duration-200 hover:shadow-soft">
                   <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                     <Target className="h-4.5 w-4.5 text-primary" />
                   </div>
-                  <p className="text-[13px] font-bold text-foreground">Company-specific</p>
+                  <p className="text-[13px] font-bold text-foreground">Built around your business</p>
                   <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                    Not generic benchmarks — insights tailored to your data and business model
+                    Combine your own sales and cost data for a clearer view than sector benchmarks alone.
                   </p>
                 </div>
                 <div className="rounded-xl border border-border/50 bg-card p-5 text-left transition-shadow duration-200 hover:shadow-soft">
                   <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                     <Shield className="h-4.5 w-4.5 text-primary" />
                   </div>
-                  <p className="text-[13px] font-bold text-foreground">Decision support</p>
+                  <p className="text-[13px] font-bold text-foreground">Clear decision support</p>
                   <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                    Actionable levers for pricing, cost, and mix — not just more data
+                    Use data-driven insights to act on pricing, cost, mix, and planning with more confidence.
                   </p>
                 </div>
               </div>
@@ -600,7 +601,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
               </div>
 
               <p className="text-[11px] text-muted-foreground/60">
-                No commitment required · Quick exploration · See how it works
+                No commitment required · Simple first look · See how it works
               </p>
             </div>
           </div>

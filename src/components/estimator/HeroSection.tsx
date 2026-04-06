@@ -54,7 +54,7 @@ export const HeroSection = () => {
         <div className="mx-auto flex max-w-3xl flex-col items-center">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-hero-foreground/15 bg-hero-foreground/[0.08] px-4 py-1.5 text-[11px] font-medium text-hero-foreground/80 backdrop-blur-sm xs:text-xs">
             <span>📊</span>
-            <span>AI-Driven Margin Insights</span>
+            <span>Clear margin view for business decisions</span>
           </div>
 
           <h1 className="font-display text-[1.75rem] font-extrabold leading-[1.08] tracking-tight text-balance text-hero-foreground xs:text-[2rem] sm:text-[2.5rem] md:text-[2.75rem] lg:text-[3rem]">
@@ -62,7 +62,8 @@ export const HeroSection = () => {
           </h1>
 
           <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-hero-foreground/75 sm:mt-6 sm:text-base">
-            Calculate how much of your annual revenue remains after subtracting direct product costs, and compare with sector benchmarks.
+            Enter your annual revenue, direct costs, and sector to see how much revenue you keep after direct costs
+            and how that compares with typical businesses in your market.
           </p>
         </div>
       </div>

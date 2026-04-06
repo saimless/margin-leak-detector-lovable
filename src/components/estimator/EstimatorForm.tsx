@@ -89,8 +89,8 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           Revenue remaining after direct product costs
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Calculate how much of your annual revenue remains after subtracting the direct costs of delivering your
-          product or service.
+          This gives you a simple view of how much revenue is left after the direct costs of delivering your product
+          or service.
         </p>
       </div>
 
@@ -105,7 +105,8 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
             <div>
               <p className="text-[13px] font-semibold text-foreground">What this calculates</p>
               <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-                Annual revenue minus direct product-related costs (COGS), expressed as a percentage of annual revenue.
+                Annual revenue minus direct costs, shown as a percentage of annual revenue so you can quickly see how
+                much is left before overhead and operating expenses.
               </p>
             </div>
           </div>
@@ -194,11 +195,11 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 COGS are the direct costs of producing or delivering what you sell.
                 <br />
                 <br />
-                You can keep this estimate simple (e.g. purchase or material costs) or make it more detailed by
-                including labor, production, or other direct costs.
+                You can keep this estimate simple, such as material or purchase costs, or make it more detailed by
+                including labor, production, or other direct delivery costs.
                 <br />
                 <br />
-                The level of detail depends on the data you have and how precise you want your estimate to be.
+                Use the level of detail that matches the data you have today.
               </PopoverContent>
             </Popover>
           </div>
@@ -248,8 +249,9 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
             />
           </div>
           <div className="flex flex-col gap-1.5 xs:flex-row xs:items-center xs:justify-between">
-            <p className="text-xs text-muted-foreground/80">
-              Direct costs of delivering your product or service (materials, production, suppliers). Exclude marketing, rent, overhead.
+          <p className="text-xs text-muted-foreground/80">
+              Direct costs of delivering your product or service, such as materials, production, and suppliers. Do
+              not include marketing, rent, or overhead.
             </p>
             {cogsPreview && (
               <span className="w-fit rounded-md bg-primary/8 px-2.5 py-1 text-xs font-semibold text-primary">
@@ -348,8 +350,9 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           {selectedBenchmark && (
             <div className="rounded-xl border border-primary/10 bg-highlight-soft/60 px-4 py-3">
               <p className="text-xs leading-relaxed text-muted-foreground">
-                <span className="font-semibold text-primary">📏 Benchmark:</span> Anchor at{" "}
-                {formatBenchmarkAnchor(selectedBenchmark.anchor)}. Typical range{" "}
+                <span className="font-semibold text-primary">📏 Benchmark:</span> Typical businesses in this sector
+                tend to keep around {formatBenchmarkAnchor(selectedBenchmark.anchor)} of revenue after direct costs,
+                with a common range of{" "}
                 {formatBenchmarkRange(selectedBenchmark.bandLow, selectedBenchmark.bandHigh)}.
               </p>
             </div>
@@ -374,7 +377,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
         </div>
 
         <p className="text-center text-[11px] text-muted-foreground/60">
-          Benchmark-based estimate · No data is stored · This is not net profit
+          Benchmark-based estimate · No data is stored · This is not a net profit calculation
         </p>
       </form>
     </div>
