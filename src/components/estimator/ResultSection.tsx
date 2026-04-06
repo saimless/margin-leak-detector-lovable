@@ -582,7 +582,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                 <Button
                   asChild
                   size="lg"
-                  className="group h-12 w-full rounded-lg bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:h-[52px] sm:w-auto sm:text-[15px]"
+                  className="group h-auto min-h-12 w-full rounded-lg bg-primary px-6 py-3 text-sm font-semibold leading-snug text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:min-h-[52px] sm:w-auto sm:px-8 sm:text-[15px]"
                 >
                   <a href="https://www.saimless.com" target="_blank" rel="noreferrer">
                     Explore the platform
@@ -593,7 +593,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                   onClick={onReset}
                   variant="outline"
                   size="lg"
-                  className="h-12 w-full border-border/60 text-sm text-muted-foreground transition-all duration-200 hover:border-border hover:text-foreground sm:h-[52px] sm:w-auto"
+                  className="h-auto min-h-12 w-full px-4 py-3 border-border/60 text-sm leading-snug text-muted-foreground transition-all duration-200 hover:border-border hover:text-foreground sm:min-h-[52px] sm:w-auto"
                 >
                   <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
                   Try another scenario

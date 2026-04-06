@@ -99,7 +99,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
           <Button
             type="submit"
             size="lg"
-            className="group h-12 w-full rounded-lg bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:h-[52px] sm:text-[15px]"
+            className="group h-auto min-h-12 w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold leading-snug text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:min-h-[52px] sm:text-[15px]"
           >
             <Send className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
             Send my breakdown

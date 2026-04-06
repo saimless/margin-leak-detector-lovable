@@ -369,10 +369,10 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           <Button
             type="submit"
             size="lg"
-            className="group h-12 w-full rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:h-[52px] sm:text-[15px]"
+            className="group h-auto min-h-12 w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold leading-snug text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:min-h-[52px] sm:px-5 sm:text-[15px]"
           >
-            <span className="min-w-0">Calculate revenue remaining after direct costs</span>
-            <ArrowRight className="ml-2 hidden h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 xs:block" />
+            <span className="min-w-0 text-center">Generate insights</span>
+            <ArrowRight className="ml-2 hidden h-4 w-4 shrink-0 transition-transform duration-200 xs:block group-hover:translate-x-0.5" />
           </Button>
         </div>
 
