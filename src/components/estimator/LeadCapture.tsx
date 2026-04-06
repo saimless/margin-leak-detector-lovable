@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CheckCircle2, Send } from "lucide-react";
+import { CheckCircle2, Send, Mail } from "lucide-react";
 import type { EstimatorResult } from "@/pages/Index";
 
 interface LeadCaptureProps {
@@ -25,12 +25,12 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
 
   if (submitted) {
     return (
-      <div className="card-shell px-5 py-10 text-center sm:px-8 sm:py-12">
-        <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-success/10">
-          <CheckCircle2 className="h-6 w-6 text-success" />
+      <div className="card-shell px-5 py-12 text-center sm:px-8 sm:py-14">
+        <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-success/10">
+          <CheckCircle2 className="h-7 w-7 text-success" />
         </div>
         <h3 className="font-display text-lg font-bold text-foreground">Thank you, {name}.</h3>
-        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
           We'll send your personalized breakdown to <strong className="text-foreground">{email}</strong> shortly.
         </p>
       </div>
@@ -38,22 +38,27 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
   }
 
   return (
-    <div className="card-shell">
-      <div className="card-section pb-0 pt-7 sm:pt-8">
-        <p className="mb-3 text-xs font-medium uppercase tracking-widest text-primary">
-          Personalized Report
-        </p>
+    <div className="card-shell transition-shadow duration-200 hover:shadow-card">
+      <div className="card-section pb-0 pt-8 sm:pt-10">
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+            <Mail className="h-4 w-4 text-primary" />
+          </div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+            Personalized Report
+          </p>
+        </div>
         <h3 className="font-display text-lg font-bold text-foreground sm:text-xl">
           Receive your personalized breakdown
         </h3>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           We'll send a short, tailored analysis based on your inputs — completely free.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="card-section space-y-4 py-6">
+      <form onSubmit={handleSubmit} className="card-section space-y-5 py-7">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="name" className="text-[13px] font-semibold">Name *</Label>
             <Input
               id="name"
@@ -61,10 +66,10 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
               required
-              className="touch-target h-11 rounded-lg border-border bg-background text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/15"
+              className="touch-target h-12 rounded-lg border-border/80 bg-background text-sm transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/15"
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="email" className="text-[13px] font-semibold">Work email *</Label>
             <Input
               id="email"
@@ -73,11 +78,11 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@company.com"
               required
-              className="touch-target h-11 rounded-lg border-border bg-background text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/15"
+              className="touch-target h-12 rounded-lg border-border/80 bg-background text-sm transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/15"
             />
           </div>
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <Label htmlFor="company" className="text-[13px] font-semibold">
             Company <span className="font-normal text-muted-foreground">(optional)</span>
           </Label>
@@ -86,7 +91,7 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             placeholder="Company name"
-            className="touch-target h-11 rounded-lg border-border bg-background text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/15"
+            className="touch-target h-12 rounded-lg border-border/80 bg-background text-sm transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
         </div>
 
@@ -94,14 +99,14 @@ export const LeadCapture = ({ result }: LeadCaptureProps) => {
           <Button
             type="submit"
             size="lg"
-            className="group h-11 w-full rounded-lg bg-primary text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 sm:h-12 sm:text-[15px]"
+            className="group h-12 w-full rounded-lg bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:h-[52px] sm:text-[15px]"
           >
             <Send className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
             Send my breakdown
           </Button>
         </div>
 
-        <p className="text-center text-[11px] text-muted-foreground/70">
+        <p className="text-center text-[11px] text-muted-foreground/60">
           No spam · No sales calls · One-time analysis based on your estimate
         </p>
       </form>

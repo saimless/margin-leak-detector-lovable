@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, Check, ChevronDown, Info } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Info, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,39 +75,49 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
   };
 
   return (
-    <div className="card-shell">
-      <div className="card-section pb-0 pt-7 sm:pt-9">
-        <p className="mb-4 text-xs font-medium uppercase tracking-widest text-primary">
-          Revenue Calculator
-        </p>
+    <div className="card-shell transition-shadow duration-200 hover:shadow-card">
+      <div className="card-section pb-0 pt-8 sm:pt-10">
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+            <Calculator className="h-4 w-4 text-primary" />
+          </div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+            Margin Calculator
+          </p>
+        </div>
         <h2 className="font-display text-xl font-bold text-foreground sm:text-2xl">
           Revenue remaining after direct product costs
         </h2>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
           Calculate how much of your annual revenue remains after subtracting the direct costs of delivering your
           product or service.
         </p>
       </div>
 
-      <div className="card-section py-4">
-        <div className="h-px bg-border/60" />
+      <div className="card-section py-5">
+        <div className="h-px bg-border/50" />
       </div>
 
-      <form onSubmit={handleSubmit} className="card-section space-y-7 pb-8 pt-0 sm:space-y-8">
-        <div className="rounded-lg border border-primary/10 bg-highlight-soft px-4 py-3.5">
-          <p className="text-[13px] font-medium text-foreground">What this calculates</p>
-          <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-            Annual revenue minus direct product-related costs (COGS), expressed as a percentage of annual revenue.
-          </p>
+      <form onSubmit={handleSubmit} className="card-section space-y-8 pb-9 pt-0 sm:space-y-9">
+        <div className="rounded-xl border border-primary/10 bg-highlight-soft/60 px-5 py-4">
+          <div className="flex items-start gap-3">
+            <span className="mt-0.5 text-base" aria-hidden="true">💡</span>
+            <div>
+              <p className="text-[13px] font-semibold text-foreground">What this calculates</p>
+              <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+                Annual revenue minus direct product-related costs (COGS), expressed as a percentage of annual revenue.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Step 1: Revenue */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <Label htmlFor="revenue" className="text-[13px] font-semibold text-foreground">
             Step 1: Expected annual revenue
           </Label>
           <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">€</div>
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground/70">€</div>
             <Input
               id="revenue"
               type="text"
@@ -143,15 +153,15 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 }));
               }}
               placeholder="e.g. 12.500.000 or 12.5M"
-              className={`touch-target h-11 rounded-lg border-border bg-background pl-9 text-sm transition-all placeholder:text-muted-foreground/50 focus:border-primary focus:ring-2 focus:ring-primary/15 ${
+              className={`touch-target h-12 rounded-lg border-border/80 bg-background pl-9 text-sm transition-all duration-200 placeholder:text-muted-foreground/40 focus:border-primary focus:ring-2 focus:ring-primary/15 ${
                 errors.revenue && touched.revenue ? "border-destructive focus:ring-destructive/15" : ""
               }`}
             />
           </div>
           <div className="flex flex-col gap-1.5 xs:flex-row xs:items-center xs:justify-between">
-            <p className="text-xs text-muted-foreground">Your estimated total revenue over a full year.</p>
+            <p className="text-xs text-muted-foreground/80">Your estimated total revenue over a full year.</p>
             {revenuePreview && (
-              <span className="w-fit rounded-md bg-highlight-soft px-2 py-0.5 text-xs font-medium text-primary">
+              <span className="w-fit rounded-md bg-primary/8 px-2.5 py-1 text-xs font-semibold text-primary">
                 ≈ {revenuePreview}
               </span>
             )}
@@ -165,7 +175,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
         </div>
 
         {/* Step 2: COGS */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <div className="flex items-center gap-2">
             <Label htmlFor="cogs" className="text-[13px] font-semibold text-foreground">
               Step 2: Estimated annual COGS
@@ -174,7 +184,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               <PopoverTrigger asChild>
                 <button
                   type="button"
-                  className="touch-target inline-flex min-w-11 items-center justify-center text-muted-foreground/60 transition-colors hover:text-primary"
+                  className="touch-target inline-flex min-w-11 items-center justify-center text-muted-foreground/50 transition-colors duration-200 hover:text-primary"
                   aria-label="COGS explanation"
                 >
                   <Info className="h-3.5 w-3.5" />
@@ -193,7 +203,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
             </Popover>
           </div>
           <div className="relative">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">€</div>
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground/70">€</div>
             <Input
               id="cogs"
               type="text"
@@ -232,17 +242,17 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 }));
               }}
               placeholder="e.g. 7.200.000 or 7.2M"
-              className={`touch-target h-11 rounded-lg border-border bg-background pl-9 text-sm transition-all placeholder:text-muted-foreground/50 focus:border-primary focus:ring-2 focus:ring-primary/15 ${
+              className={`touch-target h-12 rounded-lg border-border/80 bg-background pl-9 text-sm transition-all duration-200 placeholder:text-muted-foreground/40 focus:border-primary focus:ring-2 focus:ring-primary/15 ${
                 errors.cogs && touched.cogs ? "border-destructive focus:ring-destructive/15" : ""
               }`}
             />
           </div>
           <div className="flex flex-col gap-1.5 xs:flex-row xs:items-center xs:justify-between">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground/80">
               Direct costs of delivering your product or service (materials, production, suppliers). Exclude marketing, rent, overhead.
             </p>
             {cogsPreview && (
-              <span className="w-fit rounded-md bg-highlight-soft px-2 py-0.5 text-xs font-medium text-primary">
+              <span className="w-fit rounded-md bg-primary/8 px-2.5 py-1 text-xs font-semibold text-primary">
                 ≈ {cogsPreview}
               </span>
             )}
@@ -262,13 +272,13 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
         </div>
 
         {/* Step 3: Sector */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <div className="flex flex-col gap-1.5 xs:flex-row xs:items-center xs:justify-between">
             <Label htmlFor="sector" className="text-[13px] font-semibold text-foreground">
               Step 3: Sector
             </Label>
             {selectedSectorLabel && (
-              <span className="w-fit rounded-md bg-highlight-soft px-2 py-0.5 text-xs font-medium text-primary">
+              <span className="w-fit rounded-md bg-primary/8 px-2.5 py-1 text-xs font-semibold text-primary">
                 {selectedSectorLabel}
               </span>
             )}
@@ -282,17 +292,17 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                 aria-expanded={isSectorMenuOpen}
                 aria-haspopup="listbox"
                 className={cn(
-                  "touch-target flex h-11 w-full items-center justify-between rounded-lg border bg-background px-4 text-left text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/15 focus:ring-offset-0",
+                  "touch-target flex h-12 w-full items-center justify-between rounded-lg border bg-background px-4 text-left text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/15 focus:ring-offset-0",
                   errors.sector && touched.sector
                     ? "border-destructive/40 focus:ring-destructive/15"
-                    : "border-border hover:border-muted-foreground/30",
+                    : "border-border/80 hover:border-muted-foreground/30",
                 )}
               >
-                <span className={cn("truncate pr-4", sector ? "text-foreground" : "text-muted-foreground")}>
+                <span className={cn("truncate pr-4", sector ? "text-foreground" : "text-muted-foreground/60")}>
                   {selectedSectorLabel ?? "Select your sector"}
                 </span>
                 <ChevronDown
-                  className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform", isSectorMenuOpen && "rotate-180")}
+                  className={cn("h-4 w-4 shrink-0 text-muted-foreground/50 transition-transform duration-200", isSectorMenuOpen && "rotate-180")}
                 />
               </button>
             </PopoverTrigger>
@@ -301,9 +311,9 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               side="bottom"
               sideOffset={8}
               avoidCollisions={false}
-              className="max-h-[22rem] w-[min(30rem,var(--radix-popover-trigger-width))] overflow-y-auto rounded-xl border-border bg-card p-1 shadow-card"
+              className="max-h-[22rem] w-[min(30rem,var(--radix-popover-trigger-width))] overflow-y-auto rounded-xl border-border/80 bg-card p-1.5 shadow-premium"
             >
-              <div role="listbox" aria-labelledby="sector" className="space-y-1">
+              <div role="listbox" aria-labelledby="sector" className="space-y-0.5">
                 {SECTOR_OPTIONS.map((option) => {
                   const isSelected = option.value === sector;
 
@@ -314,7 +324,7 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
                       role="option"
                       aria-selected={isSelected}
                       className={cn(
-                        "flex min-h-11 w-full items-center gap-3 rounded-lg py-2.5 pl-3 pr-3 text-left text-[13px] transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary/15",
+                        "flex min-h-11 w-full items-center gap-3 rounded-lg py-2.5 pl-3 pr-3 text-left text-[13px] transition-colors duration-150 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary/15",
                         isSelected && "bg-primary/[0.06] font-medium text-primary",
                       )}
                       onClick={() => {
@@ -334,11 +344,11 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
               </div>
             </PopoverContent>
           </Popover>
-          <p className="text-xs text-muted-foreground">Benchmark ranges are specific to the sector you select.</p>
+          <p className="text-xs text-muted-foreground/80">Benchmark ranges are specific to the sector you select.</p>
           {selectedBenchmark && (
-            <div className="rounded-lg border border-primary/10 bg-highlight-soft px-3.5 py-2.5">
+            <div className="rounded-xl border border-primary/10 bg-highlight-soft/60 px-4 py-3">
               <p className="text-xs leading-relaxed text-muted-foreground">
-                <span className="font-medium text-primary">Benchmark:</span> Anchor at{" "}
+                <span className="font-semibold text-primary">📏 Benchmark:</span> Anchor at{" "}
                 {formatBenchmarkAnchor(selectedBenchmark.anchor)}. Typical range{" "}
                 {formatBenchmarkRange(selectedBenchmark.bandLow, selectedBenchmark.bandHigh)}.
               </p>
@@ -356,14 +366,14 @@ export const EstimatorForm = ({ onCalculate }: EstimatorFormProps) => {
           <Button
             type="submit"
             size="lg"
-            className="group h-11 w-full rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 sm:h-12 sm:text-[15px]"
+            className="group h-12 w-full rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:h-[52px] sm:text-[15px]"
           >
             <span className="min-w-0">Calculate revenue remaining after direct costs</span>
             <ArrowRight className="ml-2 hidden h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 xs:block" />
           </Button>
         </div>
 
-        <p className="text-center text-[11px] text-muted-foreground/70">
+        <p className="text-center text-[11px] text-muted-foreground/60">
           Benchmark-based estimate · No data is stored · This is not net profit
         </p>
       </form>

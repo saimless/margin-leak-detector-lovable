@@ -8,6 +8,10 @@ import {
   Target,
   TrendingDown,
   TrendingUp,
+  BarChart3,
+  Zap,
+  Shield,
+  ArrowUpRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -309,42 +313,43 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
   const visuals = resultVisuals[result.performanceState];
   const AnalysisIcon = content.icon;
   const dynamicLevers = getDynamicLevers(result.sectorKey, result.performanceState);
-  const benchmarkPositionValue =
-    result.benchmarkBandPositionRaw < 0 || result.benchmarkBandPositionRaw > 100
-      ? content.badge
-      : `${Math.round(result.benchmarkBandPositionClamped)}% through benchmark band`;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Main results card */}
       <div className="card-shell">
-        <div className="card-section border-b border-border/60 py-7 sm:py-9">
-          <p className="mb-4 text-xs font-medium uppercase tracking-widest text-primary">
-            Analysis Results
-          </p>
+        <div className="card-section border-b border-border/50 py-8 sm:py-10">
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <BarChart3 className="h-4 w-4 text-primary" />
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+              Analysis Results
+            </p>
+          </div>
           <h2 className="font-display text-xl font-bold leading-tight tracking-tight text-foreground sm:text-2xl">
             Revenue remaining after direct product costs
           </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             How much revenue remains after covering the direct costs of what you sell, before accounting for
             operating expenses like marketing, salaries, or overhead.
           </p>
         </div>
 
-        <div className="card-section space-y-6 py-6 sm:py-8">
+        <div className="card-section space-y-7 py-7 sm:py-9">
           {/* Primary metric + side panels */}
-          <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
             {/* Primary metric */}
-            <div className="rounded-lg border border-primary/15 bg-highlight-soft p-6">
+            <div className="rounded-xl border border-primary/15 bg-gradient-to-br from-highlight-soft/80 to-highlight-soft/40 p-7">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-xs font-medium uppercase tracking-widest text-primary">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-primary">
                     Your calculated percentage
                   </p>
-                  <p className="mt-3 text-5xl font-extrabold tracking-tight text-foreground tabular-nums sm:text-6xl">
+                  <p className="mt-4 text-5xl font-extrabold tracking-tight text-foreground tabular-nums sm:text-6xl">
                     {formatPercent(result.percentageRemaining)}
                   </p>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                     Revenue remaining: {formatEuro(result.revenueAfterDirectCosts)} from{" "}
                     {formatEuro(result.annualRevenue)} annual revenue.
                   </p>
@@ -362,27 +367,27 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
             </div>
 
             {/* Side metrics */}
-            <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
-              <div className="rounded-lg border border-border/80 bg-card p-4">
-                <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+            <div className="grid gap-3.5 sm:grid-cols-3 xl:grid-cols-1">
+              <div className="rounded-xl border border-border/60 bg-card p-4 transition-shadow duration-200 hover:shadow-soft">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                   {visuals.benchmark} Sector benchmark range
                 </p>
-                <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">{result.benchmarkRange}</p>
+                <p className="mt-2.5 text-2xl font-bold text-foreground tabular-nums">{result.benchmarkRange}</p>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
                   Anchor: {result.benchmarkAnchor}
                 </p>
               </div>
-              <div className="rounded-lg border border-border/80 bg-card p-4">
-                <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+              <div className="rounded-xl border border-border/60 bg-card p-4 transition-shadow duration-200 hover:shadow-soft">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                   {visuals.position} Relative position
                 </p>
-                <p className="mt-2 text-xl font-bold text-foreground">{content.performerIndicatorLabel}</p>
+                <p className="mt-2.5 text-xl font-bold text-foreground">{content.performerIndicatorLabel}</p>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
                   {result.benchmarkBandPositionLabel}
                 </p>
                 {result.benchmarkBandPositionRaw >= 0 && result.benchmarkBandPositionRaw <= 100 && (
                   <div className="mt-3">
-                    <div className="h-1.5 overflow-hidden rounded-full bg-border">
+                    <div className="h-2 overflow-hidden rounded-full bg-muted">
                       <div
                         className="h-full rounded-full bg-primary transition-all duration-500"
                         style={{ width: `${result.benchmarkBandPositionClamped}%` }}
@@ -391,11 +396,11 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                   </div>
                 )}
               </div>
-              <div className="rounded-lg border border-primary/15 bg-highlight-soft p-4">
-                <p className="text-[10px] font-medium uppercase tracking-widest text-primary">
+              <div className="rounded-xl border border-primary/12 bg-highlight-soft/50 p-4 transition-shadow duration-200 hover:shadow-soft">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-primary">
                   {visuals.upside} {result.upsideEstimate.title}
                 </p>
-                <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">
+                <p className="mt-2.5 text-2xl font-bold text-foreground tabular-nums">
                   {formatEuro(result.upsideEstimate.additionalRevenueRemaining)}
                 </p>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
@@ -407,7 +412,7 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           </div>
 
           {/* Summary stats row */}
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3.5 sm:grid-cols-2 xl:grid-cols-4">
             {[
               { label: "Annual revenue", value: formatEuro(result.annualRevenue), icon: visuals.summary[0] },
               { label: "Annual COGS", value: formatEuro(result.annualCogs), icon: visuals.summary[1] },
@@ -425,22 +430,22 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
                 icon: visuals.summary[3],
               },
             ].map((item) => (
-              <div key={item.label} className="rounded-lg border border-border/60 bg-card p-3.5">
-                <p className="mb-1 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+              <div key={item.label} className="rounded-xl border border-border/50 bg-card p-4 transition-shadow duration-200 hover:shadow-soft">
+                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                   {item.icon} {item.label}
                 </p>
-                <p className="text-sm font-semibold text-foreground">{item.value}</p>
+                <p className="text-sm font-bold text-foreground">{item.value}</p>
               </div>
             ))}
           </div>
 
           {/* Analysis narrative */}
-          <div className="rounded-lg border border-border/60 bg-card p-5">
-            <div className="mb-3 flex items-center gap-2.5">
-              <AnalysisIcon className={`h-4 w-4 ${content.iconClassName}`} />
-              <p className="text-sm font-semibold text-foreground">{content.headline}</p>
+          <div className="rounded-xl border border-border/50 bg-card p-6">
+            <div className="mb-4 flex items-center gap-2.5">
+              <AnalysisIcon className={`h-4.5 w-4.5 ${content.iconClassName}`} />
+              <p className="text-sm font-bold text-foreground">{content.headline}</p>
             </div>
-            <div className="space-y-3 text-[13px] leading-relaxed text-muted-foreground">
+            <div className="space-y-3.5 text-[13px] leading-relaxed text-muted-foreground">
               <p>
                 We calculated annual revenue minus annual COGS, then expressed the remainder as a percentage of annual
                 revenue. Your result is {formatPercentDetailed(result.percentageRemaining)} versus a sector benchmark
@@ -455,30 +460,31 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           </div>
 
           {/* Levers + interpretation */}
-          <div className="grid gap-4 xl:grid-cols-[1fr_0.95fr]">
-            <div className="rounded-lg border border-border/60 bg-card p-5">
-              <div className="mb-3 flex items-center gap-2.5">
+          <div className="grid gap-5 xl:grid-cols-[1fr_0.95fr]">
+            <div className="rounded-xl border border-border/50 bg-card p-6">
+              <div className="mb-4 flex items-center gap-2.5">
                 <Sparkles className="h-4 w-4 text-primary" />
-                <p className="text-sm font-semibold text-foreground">Where you can improve (and how we help)</p>
+                <p className="text-sm font-bold text-foreground">Where you can improve (and how we help)</p>
               </div>
-              <div className="grid gap-2">
-                {dynamicLevers.map((lever) => (
+              <div className="grid gap-2.5">
+                {dynamicLevers.map((lever, i) => (
                   <div
                     key={lever}
-                    className="rounded-md border border-border/50 bg-muted/30 px-3.5 py-2.5 text-[13px] leading-relaxed text-muted-foreground"
+                    className="flex items-start gap-3 rounded-lg border border-border/40 bg-muted/20 px-4 py-3 text-[13px] leading-relaxed text-muted-foreground transition-colors duration-150 hover:bg-muted/40"
                   >
-                    {lever}
+                    <span className="mt-0.5 text-xs text-primary/60 font-semibold">{String(i + 1).padStart(2, '0')}</span>
+                    <span>{lever}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/60 bg-card p-5">
-              <div className="mb-3 flex items-center gap-2.5">
+            <div className="rounded-xl border border-border/50 bg-card p-6">
+              <div className="mb-4 flex items-center gap-2.5">
                 <Gauge className="h-4 w-4 text-primary" />
-                <p className="text-sm font-semibold text-foreground">How to interpret this result</p>
+                <p className="text-sm font-bold text-foreground">How to interpret this result</p>
               </div>
-              <div className="space-y-2.5 text-[13px] leading-relaxed text-muted-foreground">
+              <div className="space-y-3 text-[13px] leading-relaxed text-muted-foreground">
                 <p>This shows the share of revenue left after direct product costs (COGS).</p>
                 <p>This is often called gross margin, but we explain it here in a simpler way.</p>
                 <p>
@@ -498,11 +504,13 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
           </div>
 
           {/* Upside callout */}
-          <div className="rounded-lg border border-primary/10 bg-highlight-soft p-5">
-            <div className="flex items-start gap-3">
-              <MoveRight className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <div className="min-w-0 space-y-1.5">
-                <p className="text-sm font-semibold text-foreground">Estimated upside</p>
+          <div className="rounded-xl border border-primary/12 bg-gradient-to-r from-highlight-soft/70 to-highlight-soft/30 p-6">
+            <div className="flex items-start gap-3.5">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <MoveRight className="h-4 w-4 text-primary" />
+              </div>
+              <div className="min-w-0 space-y-2">
+                <p className="text-sm font-bold text-foreground">📈 Estimated upside</p>
                 <p className="text-[13px] leading-relaxed text-muted-foreground">
                   {result.upsideEstimate.summary} At your current revenue level, that translates to about{" "}
                   {formatEuro(result.upsideEstimate.additionalRevenueRemaining)} of additional revenue remaining after
@@ -514,40 +522,86 @@ export const ResultSection = ({ result, onReset }: ResultSectionProps) => {
         </div>
       </div>
 
-      {/* CTA card */}
-      <div className="card-shell">
-        <div className="card-section py-8 sm:py-10">
-          <div className="space-y-5 text-center">
-            <p className="text-xs font-medium uppercase tracking-widest text-primary">
-              Next Step
-            </p>
-            <h3 className="font-display text-lg font-bold text-foreground sm:text-xl">
-              Ready to move beyond static estimates?
-            </h3>
-            <p className="mx-auto max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Our platform connects predicted sales volumes with your cost data to show how expected demand impacts
-              your margins, helping you make more precise pricing, cost, and planning decisions.
-            </p>
-            <div className="flex flex-col items-center justify-center gap-3 pt-1 sm:flex-row">
-              <Button
-                asChild
-                size="lg"
-                className="group h-11 w-full rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 sm:h-12 sm:w-auto sm:px-8 sm:text-[15px]"
-              >
-                <a href="https://www.saimless.com" target="_blank" rel="noreferrer">
-                  Get a deeper analysis
-                  <ArrowRight className="ml-1.5 h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-                </a>
-              </Button>
-              <Button
-                onClick={onReset}
-                variant="ghost"
-                size="lg"
-                className="h-11 w-full text-sm text-muted-foreground transition-colors hover:text-foreground sm:h-12 sm:w-auto"
-              >
-                <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-                Try another scenario
-              </Button>
+      {/* CTA card — conversion-optimized */}
+      <div className="card-shell overflow-hidden">
+        <div className="relative">
+          {/* Subtle gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] via-transparent to-primary/[0.02]" />
+
+          <div className="card-section relative py-10 sm:py-14">
+            <div className="mx-auto max-w-2xl space-y-8 text-center">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.06] px-4 py-1.5 text-xs font-semibold text-primary">
+                  <Zap className="h-3.5 w-3.5" />
+                  Go beyond static estimates
+                </div>
+
+                <h3 className="font-display text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-[1.75rem]">
+                  Turn margin estimates into actionable, AI-driven insights
+                </h3>
+
+                <p className="mx-auto max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+                  This calculator shows where you stand. SAImless shows you <span className="font-semibold text-foreground">why</span> — by connecting predicted sales volumes with your cost data to deliver company-specific margin intelligence.
+                </p>
+              </div>
+
+              {/* Value props */}
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="rounded-xl border border-border/50 bg-card p-5 text-left transition-shadow duration-200 hover:shadow-soft">
+                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                    <BarChart3 className="h-4.5 w-4.5 text-primary" />
+                  </div>
+                  <p className="text-[13px] font-bold text-foreground">Predictive analysis</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                    From historical patterns to forward-looking margin forecasts
+                  </p>
+                </div>
+                <div className="rounded-xl border border-border/50 bg-card p-5 text-left transition-shadow duration-200 hover:shadow-soft">
+                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                    <Target className="h-4.5 w-4.5 text-primary" />
+                  </div>
+                  <p className="text-[13px] font-bold text-foreground">Company-specific</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                    Not generic benchmarks — insights tailored to your data and business model
+                  </p>
+                </div>
+                <div className="rounded-xl border border-border/50 bg-card p-5 text-left transition-shadow duration-200 hover:shadow-soft">
+                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                    <Shield className="h-4.5 w-4.5 text-primary" />
+                  </div>
+                  <p className="text-[13px] font-bold text-foreground">Decision support</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                    Actionable levers for pricing, cost, and mix — not just more data
+                  </p>
+                </div>
+              </div>
+
+              {/* CTA buttons */}
+              <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:justify-center">
+                <Button
+                  asChild
+                  size="lg"
+                  className="group h-12 w-full rounded-lg bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 hover:shadow-md sm:h-[52px] sm:w-auto sm:text-[15px]"
+                >
+                  <a href="https://www.saimless.com" target="_blank" rel="noreferrer">
+                    Explore the platform
+                    <ArrowUpRight className="ml-1.5 h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                </Button>
+                <Button
+                  onClick={onReset}
+                  variant="outline"
+                  size="lg"
+                  className="h-12 w-full border-border/60 text-sm text-muted-foreground transition-all duration-200 hover:border-border hover:text-foreground sm:h-[52px] sm:w-auto"
+                >
+                  <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+                  Try another scenario
+                </Button>
+              </div>
+
+              <p className="text-[11px] text-muted-foreground/60">
+                No commitment required · Quick exploration · See how it works
+              </p>
             </div>
           </div>
         </div>
